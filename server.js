@@ -17,6 +17,14 @@ app.post('/webhook', function (req, res) {
     res.sendStatus(200);
 });
 
+app.get('/webhook', function (req, res) {
+    if (req.query['hub.verify_token'] === process.env.PAGE_ACCESS_TOKEN) {
+        res.send(req.query['hub.challenge']);
+    } else {
+        res.send('Error, wrong validation token');
+    }
+});
+
 function sendMessage(recipientId, message) {
     request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
