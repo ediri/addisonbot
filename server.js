@@ -11,7 +11,7 @@ app.get('/', function (req, res) {
 })
 
 app.post('/', function (req, res) {
-    res.send('Hello '+req.query.name+' !')
+    res.send('Hello From NodeJS ' +req.query.name+' !')
 })
 
 app.listen(process.env.PORT || port);
