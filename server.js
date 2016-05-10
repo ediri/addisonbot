@@ -6,14 +6,6 @@ var app = express();
 
 var port = 8080;
 
-app.get('/', function (req, res) {
-    res.send('Hello ' + req.query.name + ' !')
-})
-
-app.post('/', function (req, res) {
-    res.send('Hello From NodeJS ' + req.query.name + ' !')
-})
-
 app.post('/webhook', function (req, res) {
     var events = req.body.entry[0].messaging;
     for (i = 0; i < events.length; i++) {
@@ -24,6 +16,16 @@ app.post('/webhook', function (req, res) {
     }
     res.sendStatus(200);
 });
+
+app.get('/', function (req, res) {
+    res.send('Hello ' + req.query.name + ' !')
+})
+
+app.post('/', function (req, res) {
+    res.send('Hello From NodeJS ' + req.query.name + ' !')
+})
+
+
 
 app.listen(process.env.PORT || port);
 console.log('Running on http://localhost:' + port);
