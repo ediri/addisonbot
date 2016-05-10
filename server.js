@@ -11,6 +11,14 @@ app.use(bodyParser.json());
 
 var port = 8080;
 
+app.get('/', function (req, res) {
+    res.send('Hello ' + req.query.name + ' !')
+})
+
+app.post('/', function (req, res) {
+    res.send('Hello From NodeJS ' + req.query.name + ' !')
+})
+
 app.post('/webhook', function (req, res) {
     var events = req.body.entry[0].messaging;
     for (i = 0; i < events.length; i++) {
@@ -48,13 +56,7 @@ function sendMessage(recipientId, message) {
     });
 };
 
-app.get('/', function (req, res) {
-    res.send('Hello ' + req.query.name + ' !')
-})
 
-app.post('/', function (req, res) {
-    res.send('Hello From NodeJS ' + req.query.name + ' !')
-})
 
 
 
