@@ -2,7 +2,12 @@
  * Created by Engin.Diri on 10.05.2016.
  */
 var express = require('express');
+var bodyParser = require('body-parser');
+var request = require('request');
 var app = express();
+
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
 
 var port = 8080;
 
