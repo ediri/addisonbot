@@ -10,5 +10,9 @@ app.get('/', function (req, res) {
     res.send('Hello '+req.query.name+' !')
 })
 
+app.post('/', function (req, res) {
+    res.send('Hello '+req.query.name+' !')
+})
+
 app.listen(process.env.PORT || port);
 console.log('Running on http://localhost:' + port);
