@@ -10,5 +10,5 @@ app.get('/', function (req, res) {
     res.send('Hello '+req.query.name+' !')
 })
 
-app.listen(port);
+app.listen(process.env.PORT || port);
 console.log('Running on http://localhost:' + port);
