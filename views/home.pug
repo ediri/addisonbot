@@ -8,9 +8,6 @@ hmtl
   script(src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js")
   title LUNCHBOX
   style.
-    body {
-      background-color: red;
-    }
  body
   .row
     .col-md-4 &nbsp;
@@ -19,13 +16,13 @@ hmtl
       h1 LunchBox
       p Mobile payment on the fly
      div
-       h4 Mein NAme
+       h4 #{payment.name}
      div
-       h6 Beschreibung dsdf dsf fds dsf fsd fsd dfs df dfsdf ss dfsdf  sfd
+       h6 #{payment.description}
      div
-       h1 60.00EUR
+       h1 #{payment.amount} €
      div
-       a(href='#'): i.fa.fa-paypal.fa-3x
+       a(href=payment.paypalLink): i.fa.fa-paypal.fa-3x
     .col-md-4 &nbsp;
 
 
