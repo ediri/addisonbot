@@ -79,6 +79,7 @@ app.get('/webhook', function (req, res) {
 
 function createPayment() {
     console.log("createPayment");
+    console.log(paypal);
     request({
         method: 'POST',
         uri: invoiceEndPoint,
