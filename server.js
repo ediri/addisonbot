@@ -85,7 +85,7 @@ function setPaymentDone(req, res) {
     }, function (error, response, body) {
         if (response.statusCode === 200) {
             //todo
-            res.send('ok');
+            res.render('login');
         }
     });
 }
