@@ -107,9 +107,9 @@ function createPayment(userId) {
                 }
             });
         }, function (userjson, callback) {
-            _(friends).forEach(function (friend) {
+          /*  _(friends).forEach(function (friend) {
                 paypal.payer.push(friend);
-            });
+            });*/
             request({
                 method: 'POST',
                 uri: invoiceEndPoint,
@@ -125,7 +125,7 @@ function createPayment(userId) {
                     });
                     callback(null, json)
                 }*/
-                callback(null, json);
+                callback(null, body);
             });
         }], function (err, result) {
 
