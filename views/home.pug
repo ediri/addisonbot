@@ -23,6 +23,8 @@ hmtl
     }
     h4 {
       margin: 30px;
+    }
+    h6 {
       font-style: italic;
     }
     #value {
@@ -43,7 +45,7 @@ hmtl
      div
        h6 #{payment.description}
      div
-       h1 #{payment.amount} €
+       h1#value #{payment.amount} €
      div
        a(href=payment.paypalLink): i.fa.fa-paypal.fa-3x
     .col-md-4 &nbsp;

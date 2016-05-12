@@ -37,19 +37,28 @@ hmtl
     .col-md-4#middle
      div
       h1 LunchBox
-      p Mobile payment on the fly
+      p Admin-area
      div
-       h4 Host
+       h4 #{payment.name}
      div
-       h4 Amount altogether
+       h4 #{payment.amount}
      div
-       h4 Number of participants
+       h4 #{payment.invoices.length} participants
      div
-       h4 Description
+       h4 #{payment.description}
      div
-       // TODO Schleife
+       table.table.table-striped
+         thead
+           tr
+             th Name
+           tr
+             th State
+         tbody
+           each val in #{payment.invoices}
+             tr
+               td= val
      div
-       h4 Overall&nbsp;state
+       h4 Overall&nbsp;state #{payment.state}
     .col-md-4 &nbsp;
 
 
