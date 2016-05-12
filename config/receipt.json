@@ -28,12 +28,12 @@
         }
       ],
       "address": {
-        "street_1": "",
-        "street_2": "",
-        "city": "",
-        "postal_code": "",
-        "state": "",
-        "country": ""
+        "street_1": " ",
+        "street_2": " ",
+        "city": " ",
+        "postal_code": " ",
+        "state": " ",
+        "country": " "
       },
       "summary": {
         "total_cost": 56.14
