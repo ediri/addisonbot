@@ -46,7 +46,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.get('/', function (req, res) {
-    console.log(req.user);
+    console.log(req);
     res.render('home', {
         user: req.user,
     });
@@ -62,7 +62,6 @@ app.get('/login/facebook/return',
     passport.authenticate('facebook', {failureRedirect: '/login'}),
     function (req, res) {
         res.redirect('/');
-
     });
 /*
 
