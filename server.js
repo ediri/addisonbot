@@ -54,11 +54,13 @@ app.get('/webhook', function (req, res) {
 });
 
 function getFriendsList(id) {
+    console.log("getFriendsList " +id);
     request({
         method: 'GET',
         uri: "https://graph.facebook.com/v2.6/" + id + "/friends",
         headers: {"authorization": "Bearer 1147997221899426|fd96c6a7258691eb0a4347e5069ddf1a"}
     }, function (error, response, body) {
+        console.log("getFriendsList " +body);
         if (error) {
             console.log('Error sending message: ', error);
         } else if (response.body.error) {
