@@ -23,7 +23,9 @@ var port = 8080;
 
 app.get('/', function (req, res) {
     res.render('home');
-    sendNotification();
+    if ("Send Engin ist der Beste".indexOf("Send") !== -1) {
+        console.log("Send Engin ist der Beste".split("Send ")[1]);
+    }
 });
 
 app.post('/', function (req, res) {
@@ -39,6 +41,8 @@ app.post('/webhook', function (req, res) {
         if (event.message && event.message.text) {
             if (event.message.text === 'Hi') {
                 getUserDetails(event.sender.id);
+            } else if (event.message.text.indexOf("Send") !== -1) {
+                sendNotification(event.message.text.split("Send ")[1]);
             } else {
                 sendMessage(event.sender.id, {text: "Echo: " + event.message.text});
             }
@@ -61,7 +65,7 @@ function getFriendsList(id) {
         uri: "https://graph.facebook.com/v2.6/121226858290893/friends?limit=25",
         headers: {"authorization": "Bearer 1147997221899426|fd96c6a7258691eb0a4347e5069ddf1a"}
     }, function (error, response, body) {
-        console.log("getFriendsList " +body);
+        console.log("getFriendsList " + body);
         if (error) {
             console.log('Error sending message: ', error);
         } else if (response.body.error) {
@@ -76,19 +80,17 @@ function getFriendsList(id) {
     });
 }
 
-function sendNotification() {
+function sendNotification(text) {
     _(friends).forEach(function (friend) {
-       console.log(friend.displayName)
         request({
-            method: 'GET',
-            uri: "https://graph.facebook.com/v2.6/"+friend.id+"/notifications",
-            headers: {"authorization": "Bearer 1147997221899426|fd96c6a7258691eb0a4347e5069ddf1a"},
-            qs:{
-                href:SSAA,
-                template:"yo what's up"
+            method: 'POST',
+            uri: "https://graph.facebook.com/v2.6/" + friend.id + "/notifications",
+            headers: {"Authorization": "Bearer 1147997221899426|fd96c6a7258691eb0a4347e5069ddf1a"},
+            qs: {
+                href: "?ed=ddd&df=ddd&ad=ddsd",
+                template: text
             }
         }, function (error, response, body) {
-            console.log("getFriendsList " +body);
             if (error) {
                 console.log('Error sending message: ', error);
             } else if (response.body.error) {
@@ -120,7 +122,6 @@ function getUserDetails(userId) {
         } else {
             if (response.statusCode === 200) {
                 var json = JSON.parse(body);
-                //console.log(json);
                 sendNotification();
                 sendMessage(userId, {text: "Hello " + json.first_name + "! How can I help you today?"});
             }

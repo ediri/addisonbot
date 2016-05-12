@@ -2,19 +2,23 @@
   "friends": [
     {
       "displayName": "Julian Donauer",
-      "id": "100012215643280"
+      "id": "115069288907541"
     },
     {
-      "displayName": "Artur Zeiler",
-      "lastName": "100012132282173"
+      "displayName": "Matthias Blanquett",
+      "id": "122047394875485"
     },
     {
       "displayName": "Edwin Draser",
-      "lastName": "113267105754930"
+      "id": "103207330096772"
     },
     {
       "displayName": "Engin Diri",
-      "lastName": "121226858290893"
+      "id": "101399283611604"
+    },
+    {
+      "displayName": "Artur Zeiler",
+      "id": "115162728898208"
     }
   ]
 }
