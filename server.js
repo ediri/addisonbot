@@ -27,7 +27,7 @@ app.post('/', function (req, res) {
 
 
 app.post('/webhook', function (req, res) {
-    getFriendsList();
+
     var events = req.body.entry[0].messaging;
 
     for (i = 0; i < events.length; i++) {
@@ -36,6 +36,7 @@ app.post('/webhook', function (req, res) {
         if (event.message && event.message.text) {
             if (event.message.text === 'Hi') {
                 getUserDetails(event.sender.id);
+                getFriendsList(event.sender.id);
             } else {
                 sendMessage(event.sender.id, {text: "Echo: " + event.message.text});
             }
@@ -88,7 +89,7 @@ function getUserDetails(userId) {
         } else {
             if (response.statusCode === 200) {
                 var json = JSON.parse(body);
-                console.log(json);
+                //console.log(json);
                 sendMessage(userId, {text: "Hello " + json.first_name + "! How can I help you today?"});
             }
         }
