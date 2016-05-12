@@ -10,8 +10,7 @@
         {
           "title": "--------",
           "price": 12,
-          "currency": "EUR",
-          "image_url": "------"
+          "currency": "EUR"
         }
       ],
       "summary": {
