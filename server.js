@@ -122,6 +122,7 @@ function createPayment(userId) {
                        // console.log(payer.payer.referenceId + " " + payer.payer.name + " " + payer.payer.paymentId);
                         //sendNotification(userjson.first_name, payer.payer.referenceId, payer.payer.name, payer.payer.paymentId)
                     });
+                    callback(null, json)
                 }
             });
         }], function (err, result) {
