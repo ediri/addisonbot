@@ -28,12 +28,12 @@
         }
       ],
       "address": {
-        "street_1": "1 Hacker Way",
+        "street_1": "",
         "street_2": "",
-        "city": "Menlo Park",
-        "postal_code": "94025",
-        "state": "CA",
-        "country": "US"
+        "city": "",
+        "postal_code": "",
+        "state": "",
+        "country": ""
       },
       "summary": {
         "total_cost": 56.14
