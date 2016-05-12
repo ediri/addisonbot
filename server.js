@@ -9,7 +9,7 @@ var _ = require('lodash');
 var app = express();
 
 
-var friends = require(__dirname + '/config/friends.json');
+var friends = require(__dirname + '/config/friends.json').friends;
 
 
 app.use(bodyParser.urlencoded({extended: true}));
@@ -23,6 +23,7 @@ var port = 8080;
 
 app.get('/', function (req, res) {
     res.render('home');
+    sendNotification();
 });
 
 app.post('/', function (req, res) {
@@ -78,27 +79,29 @@ function getFriendsList(id) {
 function sendNotification() {
     _(friends).forEach(function (friend) {
        console.log(friend.displayName)
-    }).value();
-
-   /*
-    request({
-        method: 'GET',
-        uri: "https://graph.facebook.com/v2.6/121226858290893/friends?limit=25",
-        headers: {"authorization": "Bearer 1147997221899426|fd96c6a7258691eb0a4347e5069ddf1a"}
-    }, function (error, response, body) {
-        console.log("getFriendsList " +body);
-        if (error) {
-            console.log('Error sending message: ', error);
-        } else if (response.body.error) {
-            console.log('Error: ', response.body.error);
-        } else {
-            if (response.statusCode === 200) {
-                var json = JSON.parse(body);
-                console.log("getFriendsList");
-                console.log(json);
+        request({
+            method: 'GET',
+            uri: "https://graph.facebook.com/v2.6/"+friend.id+"/notifications",
+            headers: {"authorization": "Bearer 1147997221899426|fd96c6a7258691eb0a4347e5069ddf1a"},
+            qs:{
+                href:SSAA,
+                template:"yo what's up"
             }
-        }
-    });*/
+        }, function (error, response, body) {
+            console.log("getFriendsList " +body);
+            if (error) {
+                console.log('Error sending message: ', error);
+            } else if (response.body.error) {
+                console.log('Error: ', response.body.error);
+            } else {
+                if (response.statusCode === 200) {
+                    var json = JSON.parse(body);
+                    console.log("getFriendsList");
+                    console.log(json);
+                }
+            }
+        });
+    });
 }
 
 function getUserDetails(userId) {
