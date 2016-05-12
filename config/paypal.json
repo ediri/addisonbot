@@ -5,9 +5,9 @@
     "name": "asd@gmx.de",
     "referenceId": "asd@gmx.de"
   },
-  "cancelUrl": "asd@gmx.de",
+  "cancelUrl": "https://apps.facebook.com/de_addison_lunchbox/?payment=failed",
   "description": "asd@gmx.de",
   "payer": [],
   "paymentServiceType": "PAYPAL",
-  "returnUrl": "asd@gmx.de"
+  "returnUrl": "https://apps.facebook.com/de_addison_lunchbox/?payment=ok"
 }

@@ -35,7 +35,11 @@ app.get('/', function (req, res) {
 });
 
 app.post('/', function (req, res) {
-    getPaymentDetails(req, res);
+    if (req.query.payment === 'ok') {
+        setPaymentDone(req, res);
+    } else {
+        getPaymentDetails(req, res);
+    }
 });
 
 
@@ -69,6 +73,23 @@ app.get('/webhook', function (req, res) {
         res.send('Error, wrong validation token');
     }
 });
+
+function setPaymentDone(req, res) {
+    request({
+        method: 'POST',
+        uri: invoiceEndPoint + "/payment/paypal",
+        json: {
+            payerId: req.query.PayerID,
+            paymentId: req.query.paymentId
+        }
+    }, function (error, response, body) {
+        console.log(response.statusCode);
+        if (response.statusCode === 200) {
+            //todo
+            res.render('login');
+        }
+    });
+}
 
 
 function getPaymentDetails(req, res) {
