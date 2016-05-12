@@ -9,7 +9,8 @@ var passport = require('passport');
 var Strategy = require('passport-facebook').Strategy;
 var app = express();
 
-app.use(bodyParser.urlencoded({extended: false}));
+
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 // der Order views wird geladen. Hier liegen alle JADE Templates drin
@@ -21,9 +22,6 @@ app.set('view engine', 'pug');
 var port = 8080;
 
 
-
-
-
 passport.use(new Strategy({
         clientID: "1147997221899426",
         clientSecret: "fd96c6a7258691eb0a4347e5069ddf1a",
@@ -31,7 +29,10 @@ passport.use(new Strategy({
     },
     function (accessToken, refreshToken, profile, cb) {
 
-        return cb(null, profile);
+        User.findOrCreate({ facebookId: profile.id }, function (err, user) {
+            console.log(user);
+            return cb(err, user);
+        });
     })
 );
 passport.serializeUser(function (user, cb) {
