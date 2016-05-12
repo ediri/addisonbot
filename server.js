@@ -118,7 +118,7 @@ function sendNotification(text) {
             uri: "https://graph.facebook.com/v2.6/" + friend.id + "/notifications",
             headers: {"Authorization": "Bearer 1147997221899426|fd96c6a7258691eb0a4347e5069ddf1a"},
             qs: {
-                href: "?testparam=" + text,
+                href: "?paymentId=" + text,
                 template: text
             }
         }, function (error, response, body) {
