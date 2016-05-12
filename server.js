@@ -36,7 +36,7 @@ app.post('/webhook', function (req, res) {
         if (event.message && event.message.text) {
             if (event.message.text === 'Hi') {
                 getUserDetails(event.sender.id);
-                getFriendsList(event.sender.id);
+                //getFriendsList(event.sender.id);
             } else {
                 sendMessage(event.sender.id, {text: "Echo: " + event.message.text});
             }
@@ -84,6 +84,7 @@ function getUserDetails(userId) {
             access_token: process.env.PAGE_ACCESS_TOKEN
         },
     }, function (error, response, body) {
+        console.log("getUserDetails " +body);
         if (error) {
             console.log('Error sending message: ', error);
         } else if (response.body.error) {
