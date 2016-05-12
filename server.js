@@ -115,7 +115,6 @@ function createPayment(userId) {
                 uri: invoiceEndPoint,
                 json: paypal
             }, function (error, response, body) {
-                console.log(body);
                 if (response.statusCode === 200) {
                     //var json = JSON.parse(body);
                     _(body).forEach(function (payer) {
