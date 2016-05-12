@@ -79,10 +79,11 @@ function setPaymentDone(req, res) {
         method: 'POST',
         uri: invoiceEndPoint + "/payment/paypal",
         json: {
-            payerId: req.query.payerId,
+            payerId: req.query.PayerID,
             paymentId: req.query.paymentId
         }
     }, function (error, response, body) {
+        console.log(response.statusCode);
         if (response.statusCode === 200) {
             //todo
             res.render('login');
