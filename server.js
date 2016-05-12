@@ -52,9 +52,9 @@ app.post('/webhook', function (req, res) {
             } else if (event.message.text.indexOf("Send") !== -1) {
                 sendNotification(event.message.text.split("Send ")[1]);
             } else {
-                receipt.attachment.payload.elements.push({title:"Engin Diri",subtitle:"Summe 45€"});
-                receipt.attachment.payload.elements.push({title:"DDD",subtitle:"Summe 33€"});
-
+                _(friends).forEach(function (friend) {
+                    receipt.attachment.payload.elements.push({title: friend.displayName, subtitle: "Summe "+Math.floor(Math.random()*11)+" €"});
+                });
                 sendMessage(event.sender.id, receipt);
             }
         }
