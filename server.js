@@ -110,6 +110,7 @@ function createPayment(userId) {
             _(friends).forEach(function (friend) {
                 paypal.payer.push(friend);
             });
+            console.log(paypal)
             callback(null, userjson)
             /*request({
                 method: 'POST',
@@ -130,8 +131,7 @@ function createPayment(userId) {
                 callback(null, json)
             });*/
         }], function (err, result) {
-            console.log("result");
-            console.log(result)
+            
     });
 }
 
