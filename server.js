@@ -12,7 +12,7 @@ var async = require('async');
 var app = express();
 
 
-var invoiceEndPoint = "http://10.49.27.201:8080/invoice"
+var invoiceEndPoint = "http://addison-lunchbox.herokuapp.com/invoice"
 
 var friends = require(__dirname + '/config/friends.json').friends;
 var paypal = require(__dirname + '/config/paypal.json');
@@ -31,7 +31,7 @@ var port = 8080;
 
 app.get('/', function (req, res) {
     //getPaymentDetails(req, res);
-   // createPayment();
+    // createPayment();
 });
 
 app.post('/', function (req, res) {
@@ -107,9 +107,9 @@ function createPayment(userId) {
                 }
             });
         }, function (userjson, callback) {
-          /*  _(friends).forEach(function (friend) {
+            _(friends).forEach(function (friend) {
                 paypal.payer.push(friend);
-            });*/
+            });
             request({
                 method: 'POST',
                 uri: invoiceEndPoint,
@@ -120,7 +120,7 @@ function createPayment(userId) {
                     //var json = JSON.parse(body);
                     _(body).forEach(function (payer) {
                         console.log(payer);
-                       // console.log(payer.payer.referenceId + " " + payer.payer.name + " " + payer.payer.paymentId);
+                        // console.log(payer.payer.referenceId + " " + payer.payer.name + " " + payer.payer.paymentId);
                         //sendNotification(userjson.first_name, payer.payer.referenceId, payer.payer.name, payer.payer.paymentId)
                     });
                     callback(null, body)
