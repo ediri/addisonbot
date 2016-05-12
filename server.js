@@ -12,7 +12,7 @@ var async = require('async');
 var app = express();
 
 
-var invoiceEndPoint = "http://addison-lunchbox.herokuapp.com/invoice"
+var invoiceEndPoint = "http://10.49.27.201:8080/invoice"
 
 var friends = require(__dirname + '/config/friends.json').friends;
 var paypal = require(__dirname + '/config/paypal.json');
@@ -20,7 +20,7 @@ var message = require(__dirname + '/config/message.json');
 var receipt = require(__dirname + '/config/receipt.json');
 
 
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 app.set('views', path.join(__dirname, 'views'));
@@ -32,23 +32,6 @@ var port = 8080;
 app.get('/', function (req, res) {
     //getPaymentDetails(req, res);
    // createPayment();
-
-    request({
-        method: 'GET',
-        uri: "http://10.49.27.201:8080/invoice/test"
-    }, function (error, response, body) {
-        console.log(body);
-        if (response.statusCode === 200) {
-            var json = JSON.parse(body);
-            console.log(json);
-            /*_(json).forEach(function (payer) {
-             console.log(payer);
-             // console.log(payer.payer.referenceId + " " + payer.payer.name + " " + payer.payer.paymentId);
-             //sendNotification(userjson.first_name, payer.payer.referenceId, payer.payer.name, payer.payer.paymentId)
-             });*/
-        }
-    });
-
 });
 
 app.post('/', function (req, res) {
@@ -134,13 +117,13 @@ function createPayment(userId) {
             }, function (error, response, body) {
                 console.log(body);
                 if (response.statusCode === 200) {
-                    var json = JSON.parse(body);
-                    /*_(json).forEach(function (payer) {
+                    //var json = JSON.parse(body);
+                    _(body).forEach(function (payer) {
                         console.log(payer);
                        // console.log(payer.payer.referenceId + " " + payer.payer.name + " " + payer.payer.paymentId);
                         //sendNotification(userjson.first_name, payer.payer.referenceId, payer.payer.name, payer.payer.paymentId)
-                    });*/
-                    callback(null, json)
+                    });
+                    callback(null, body)
                 }
             });
         }], function (err, result) {
