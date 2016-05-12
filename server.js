@@ -35,9 +35,7 @@ app.get('/', function (req, res) {
 });
 
 app.post('/', function (req, res) {
-    res.render('home', {
-        param: req.query.testparam
-    });
+    getPaymentDetails(req, res);
 });
 
 
