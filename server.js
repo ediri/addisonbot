@@ -28,11 +28,9 @@ passport.use(new Strategy({
         callbackURL: 'https://lit-falls-27030.herokuapp.com/login/facebook/return'
     },
     function (accessToken, refreshToken, profile, cb) {
-
-        User.findOrCreate({ facebookId: profile.id }, function (err, user) {
-            console.log(user);
-            return cb(err, user);
-        });
+        console.log(profile)
+        console.log(accessToken);
+        return cb(null, profile);
     })
 );
 passport.serializeUser(function (user, cb) {
