@@ -15,6 +15,7 @@ var app = express();
 var friends = require(__dirname + '/config/friends.json').friends;
 var paypal = require(__dirname + '/config/paypal.json');
 var message = require(__dirname + '/config/message.json');
+var receipt = require(__dirname + '/config/receipt.json');
 
 
 app.use(bodyParser.urlencoded({extended: false}));
@@ -51,7 +52,7 @@ app.post('/webhook', function (req, res) {
             } else if (event.message.text.indexOf("Send") !== -1) {
                 sendNotification(event.message.text.split("Send ")[1]);
             } else {
-                sendMessage(event.sender.id, message);
+                sendMessage(event.sender.id, receipt);
             }
         }
     }
