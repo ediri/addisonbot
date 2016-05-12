@@ -7,7 +7,7 @@
   },
   "cancelUrl": "asd@gmx.de",
   "description": "asd@gmx.de",
-  "payer": [ ],
+  "payer": [],
   "paymentServiceType": "PAYPAL",
   "returnUrl": "asd@gmx.de"
 }

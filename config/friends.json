@@ -2,23 +2,23 @@
   "friends": [
     {
       "name": "Julian Donauer",
-      "id": "115069288907541"
+      "referenceId": "115069288907541"
     },
     {
       "name": "Matthias Blanquett",
-      "id": "122047394875485"
+      "referenceId": "122047394875485"
     },
     {
       "name": "Edwin Draser",
-      "id": "103207330096772"
+      "referenceId": "103207330096772"
     },
     {
       "name": "Engin Diri",
-      "id": "101399283611604"
+      "referenceId": "101399283611604"
     },
     {
       "name": "Artur Zeiler",
-      "id": "115162728898208"
+      "referenceId": "115162728898208"
     }
   ]
 }
