@@ -124,7 +124,6 @@ function getUserDetails(userId) {
         } else {
             if (response.statusCode === 200) {
                 var json = JSON.parse(body);
-                sendNotification();
                 sendMessage(userId, {text: "Hello " + json.first_name + "! How can I help you today?"});
             }
         }
