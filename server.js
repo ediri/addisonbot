@@ -90,25 +90,45 @@ function getPaymentDetails(req, res) {
 
 function createPayment(userId) {
     console.log("createPayment");
-    _(friends).forEach(function (friend) {
-        paypal.payer.push(friend);
-    });
-    request({
-        method: 'POST',
-        uri: invoiceEndPoint,
-        json: paypal
-    }, function (error, response, body) {
-        console.log(error);
-        console.log(response);
-        if (response.statusCode === 200) {
-            var json = JSON.parse(body);
-            _(json).forEach(function (payer) {
-                console.log(payer);
-                // console.log(payer.payer.referenceId + " " + payer.payer.name + " " + payer.payer.paymentId);
-                //sendNotification(userjson.first_name, payer.payer.referenceId, payer.payer.name, payer.payer.paymentId)
+    async.waterfall([
+        function (callback) {
+            request({
+                method: 'GET',
+                uri: "https://graph.facebook.com/v2.6/" + userId,
+                qs: {
+                    fields: "first_name,last_name,profile_pic,locale,timezone,gender",
+                    access_token: process.env.PAGE_ACCESS_TOKEN
+                },
+            }, function (error, response, body) {
+                if (response.statusCode === 200) {
+                    var json = JSON.parse(body);
+                    callback(null, json)
+                    //sendTextMessage(userId, {text: "Hello " + json.first_name + "! How can I help you today?"});
+                }
             });
-            callback(null, json)
-        }
+        }, function (userjson, callback) {
+            _(friends).forEach(function (friend) {
+                paypal.payer.push(friend);
+            });
+            request({
+                method: 'POST',
+                uri: invoiceEndPoint,
+                json: paypal
+            }, function (error, response, body) {
+                console.log(body);
+                /*if (response.statusCode === 200) {
+                    var json = JSON.parse(body);
+                    _(json).forEach(function (payer) {
+                        console.log(payer);
+                       // console.log(payer.payer.referenceId + " " + payer.payer.name + " " + payer.payer.paymentId);
+                        //sendNotification(userjson.first_name, payer.payer.referenceId, payer.payer.name, payer.payer.paymentId)
+                    });
+                    callback(null, json)
+                }*/
+                callback(null, json);
+            });
+        }], function (err, result) {
+
     });
 }
 
