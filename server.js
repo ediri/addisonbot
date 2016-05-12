@@ -53,7 +53,7 @@ app.post('/webhook', function (req, res) {
                 sendNotification(event.message.text.split("Send ")[1]);
             } else {
                 _(friends).forEach(function (friend) {
-                    receipt.attachment.payload.elements.push({title: friend.displayName, subtitle: "Summe "+Math.floor(Math.random()*11)+" €"}); 
+                    receipt.attachment.payload.elements.push({title: friend.displayName, subtitle: "Summe "+Math.floor(Math.random()*11)+" €"});
                 });
                 sendMessage(event.sender.id, receipt);
             }
@@ -140,6 +140,7 @@ function getUserDetails(userId) {
 }
 
 function sendTextMessage(recipientId, messageText) {
+    console.log(messageText);
     sendMessage(recipientId, messageText.text)
 }
 
