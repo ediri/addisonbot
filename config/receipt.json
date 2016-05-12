@@ -9,13 +9,13 @@
       "elements": [
         {
           "title": "--------",
-          "price": "------",
+          "price": 12,
           "currency": "EUR",
           "image_url": "------"
         }
       ],
       "summary": {
-        "total_cost": 123445
+        "total_cost": 12
       }
     }
   }
