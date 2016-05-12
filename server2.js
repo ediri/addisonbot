@@ -109,16 +109,22 @@ function getGermanNumberWithEUR(v) {
 
 
 
+/*
+function contactBackendServerAndCreateSPA(req, res) {
 
-
-
-function contactBackendServerAndCreateSPA(res) {
-
-    request({
+    var sq1 = {
         method: 'GET',
-        uri: "https://addison-lunchbox.herokuapp.com/invoice/invoice/test"
+        uri: "https://addison-lunchbox.herokuapp.com/invoice/invoice/test" // put user id in here
         // headers: {"authorization": "Bearer 1147997221899426|fd96c6a7258691eb0a4347e5069ddf1a"}
-    }, function (error, response, body) {
+    };
+
+    var sq2 = {
+        method: 'GET',
+        uri: "https://addison-lunchbox.herokuapp.com/invoice/getAllBillInvoice/id" // put invoice id in here
+    };
+
+
+    request(req.query.page === 1 ? sq1 : sq2, function (error, response, body) {
         // console.log("contactServer " + body);
 
         if (error) {
@@ -131,18 +137,20 @@ function contactBackendServerAndCreateSPA(res) {
                 console.log("Answer from server:");
                 console.log(json);
 
-                createSPA(res, json);
+                createSPA(req, res, json);
             }
         }
     });
 }
+*/
+
 
 /**
  *
  * @param {{}} res
- * @param {{amount, description, paypalLink}} json
+ * @param {{amount, description, paypalLink, name}} json
  */
-function createSPA(res, json) {
+function createSPA(req, res, json) {
     if (!res) {
         console.log('createSPA() - Missing res argument');
         return;
@@ -153,19 +161,11 @@ function createSPA(res, json) {
         return;
     }
 
-    // Fix the input values
-    json.amount = getGermanNumberWithEUR(json.amount);
-    if (!json.paypalLink) {
-        json.paypalLink = 'http://www.paypal.com';
-    }
-
-
-
     var spa = ''; // SinglePageApplication
 
     spa += '<!DOCTYPE html>';
     spa += '<html><head>';
-    spa += '<title>Title of the document</title>';
+    spa += '<title>LUNCHBOX</title>';
     // Latest compiled and minified bootstrap CSS
     spa += '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">';
     // Use flatly theme
@@ -180,52 +180,126 @@ function createSPA(res, json) {
     // Latest compiled and minified bootstrap JavaScript
     spa += '<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>';
     spa += '<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>';
-    spa += '<style> body { margin: 20px;} .jumbotron { padding: 10px;} </style>';
+    spa += '<style> body { margin: 20px;} .jumbotron { padding: 10px;} .turkis, .form-control[readonly] { background-color: /*darkturquoise #009CDE */ lightblue;} ';
+    spa += '#paypal-button { background: url("https://www.paypalobjects.com/webstatic/de_DE/i/de-pp-logo-150px.png") no-repeat; width:150px; height:38px; border:none; } ';
+    spa += '#amount-label {font-size:44px;} </style>';
     spa += '</head>';
     spa += '<body>';
+    // Bootstrap-grid-layout - start
+    spa += '<div class="row"><div class="col-md-4">&nbsp;</div><div class="col-md-4">';
 
-    if (true || req.query.page === '2') {
-        // Nötige Felder: 1) Grid mit Freunden schon bezahlt oder nicht
-        // 4) Rechnung (als Bild)
-        spa += '<div class="jumbotron">';
-        spa += '  <h1>LunchBox</h1>';
-        spa += '  <p>Mobile payment on the fly</p>';
+    spa += '<div class="jumbotron turkis">';
+    spa += '  <h1>LunchBox</h1>';
+    spa += '  <p>Mobile payment on the fly</p>';
+    spa += '</div>';
+
+    if (req.query.page === '1') {
+
+        // Fix the input values
+        json.amount = getGermanNumberWithEUR(json.amount);
+        if (!json.paypalLink) {
+            json.paypalLink = 'http://www.paypal.com';
+        }
+        if (!json.name) {
+            json.name = '';
+        }
+
+        // Evtl. noch hinzufügen: Rechnung (als Bild)
+
+        spa += '<form class="form-horizontal"><div class="form-group">';
+
+            spa += '<label for="host-label" class="col-sm-2 control-label">Host</label>';
+            spa += '<div class="input-group col-sm-10">';
+            spa += '  <input type="text" class="form-control" readonly id="host-label" value="' + json.name + '">';
+            spa += '</div>';
+
+            spa += '<hr />';
+
+            spa += '<label for="amount-label" class="col-sm-2 control-label">Amount</label>';
+            spa += '<div class="input-group col-sm-10">';
+            spa += '  <input type="text" class="form-control" readonly id="amount-label" value="' + json.amount + '">';
+            spa += '</div>';
+
+            spa += '<hr />';
+
+            spa += '<label for="x-label" class="col-sm-2 control-label">Description</label>';
+            spa += '<div class="input-group col-sm-10">';
+            spa += '  <textarea class="form-control" rows="3" readonly id="x-label">' + json.description + '</textarea>';
+            //spa += '  <input type="text" class="form-control turkis" readonly id="x-label" value="' + json.description + '">';
+            spa += '</div>';
+
+            spa += '<hr />';
+
+            spa += '<label for="paypal-button" class="col-sm-2 control-label">Checkout</label>';
+            spa += '<div class="input-group col-sm-10">';
+            spa += '  <a href="' + json.paypalLink + '"><button id="paypal-button" class="btn btn-default" type="button"></button></a>';
+            spa += '</div>';
+
+        spa += '</div></form>';
+
+    } else if (req.query.page === '2') {
+        // Fix the input values
+        json.amount = getGermanNumberWithEUR(json.amount);
+        //if (json.state === 'OPEN') {
+        //    json.state = 'No payments yet';
+        //}
+        //if (json.state === 'PARTIALLY_COLLECTED') {
+        //    json.state = 'Some payments received';
+        //}
+        //if (json.state === 'COMPLETELY_COLLECTED') {
+        //    json.state = 'All payments received';
+        //}
+        //if (json.state === 'TRANSFERRED_TO_BILLER') {
+        //    json.state = '';
+        //}
+        if (!json.state) {
+            json.state = 'unknown';
+        }
+
+        spa += '<form class="form-horizontal"><div class="form-group">';
+
+        spa += '<label for="host-label" class="col-sm-2 control-label">Host</label>';
+        spa += '<div class="input-group col-sm-10">';
+        spa += '  <input type="text" class="form-control" readonly id="host-label" value="' + json.biller.name + '">';
         spa += '</div>';
 
-        spa += '<label for="amount-label">Amount</label>';
-        spa += '<div class="input-group">';
+        spa += '<hr />';
+
+        spa += '<label for="amount-label" class="col-sm-2 control-label">Amount altogether</label>';
+        spa += '<div class="input-group col-sm-10">';
         spa += '  <input type="text" class="form-control" readonly id="amount-label" value="' + json.amount + '">';
         spa += '</div>';
 
         spa += '<hr />';
 
-        spa += '<label for="x-label">Description</label>';
-        spa += '<div class="input-group">';
-        spa += '  <input type="text" class="form-control" readonly id="x-label" value="' + json.description + '">';
+        spa += '<label for="x-label" class="col-sm-2 control-label">Description</label>';
+        spa += '<div class="input-group col-sm-10">';
+        spa += '  <textarea class="form-control" rows="3" readonly id="x-label">' + json.description + '</textarea>';
+        //spa += '  <input type="text" class="form-control" readonly id="x-label" value="' + json.description + '">';
         spa += '</div>';
 
         spa += '<hr />';
 
-        spa += '<div class="input-group">';
-        spa += '  <a href="' + json.paypalLink + '"><button class="btn btn-default" type="button">Checkout to PayPal!</button></a>';
+        spa += '<label for="state-label" class="col-sm-2 control-label">State</label>';
+        spa += '<div class="input-group col-sm-10">';
+        spa += '  <input type="text" class="form-control" readonly id="state-label" value="' + json.state + '">';
         spa += '</div>';
 
+        spa += '<hr />';
 
-    } else if (req.query.page === '1') {
-        // Example to get a query param
-        spa += 'The content of the document... Hello World: ' + req.query.name;
+        if (Array.isArray(json.invoices)) {
+            json.invoices.forEach(function() {
+                spa += '';
+            });
+        }
 
-        // Example to test bootstrap
-        // Falls doch noch page1 erforderlich sein sollte: Betrag, description, Auswahlliste Freundesliste, Senden-button, Upload-Button-Rechnung
-        spa += '<div class="alert alert-danger" role="alert">';
-        spa += '  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>';
-        spa += '  <span class="sr-only">Error:</span>';
-        spa += 'Enter a valid email address';
-        spa += '</div>';
+        spa += '</div></form>';
     } else {
-        spa += 'Please choose a page via page-parameter. Example: "?page=1" or "?page=2"';
+        spa += 'Please choose a page via page-parameter. E. g. "?page=1" or "?page=2"';
     }
 
+    // Bootstrap-grid-layout - end
+    spa += '</div><div class="col-md-4">&nbsp;</div></div>';
     spa += '</body>';
     spa += '</html>';
 
@@ -239,7 +313,14 @@ function createSPA(res, json) {
  * Okay, wire up the server
  */
 app.get('/', function (req, res) {
-    contactBackendServerAndCreateSPA(res);
+    // contactBackendServerAndCreateSPA(req, res);
+    var json = {"name":"<Name Billder>","description":"This is a Description","amount":42.0,"paypalLink":null};
+
+    if (req.query.page === '2') {
+        json = {"id":"id","biller":{"referenceId":"f31c8c69-8a14-454a-a539-084ed078c057","name":"Julian"},"amount":10.0,"description":null,"state":"PARTIALLY_COLLECTED","paymentServiceData":null,"timestamp":null,"invoices":[{"payer":{"referenceId":null,"name":"DönerTier"},"state":"OPEN"},{"payer":{"referenceId":null,"name":"Salat"},"state":"PAYED"}]};
+    }
+
+    createSPA(req, res, json);
 });
 
 app.post('/', function (req, res) {
