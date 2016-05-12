@@ -5,7 +5,11 @@
     "express": "~4.13.4",
     "body-parser": "~1.15.1",
     "compression": "~1.6.1",
-    "request": "~2.72.0"
+    "request": "~2.72.0",
+    "passport": "~0.3.2 ",
+    "passport-facebook": "~2.1.0",
+    "connect-ensure-login": "^0.1.1",
+    "pug": "~2.0.0-alpha7"
   },
   "scripts": {
     "start": "node server.js"

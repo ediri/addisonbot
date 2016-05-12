@@ -2,18 +2,75 @@
  * Created by Engin.Diri on 10.05.2016.
  */
 var express = require('express');
+var path = require('path');
 var bodyParser = require('body-parser');
 var request = require('request');
+var passport = require('passport');
+var Strategy = require('passport-facebook').Strategy;
 var app = express();
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
+// der Order views wird geladen. Hier liegen alle JADE Templates drin
+app.set('views', path.join(__dirname, 'views'));
+
+// JADE Template Engine verwenden! Details -> http://jade-lang.com/reference/
+app.set('view engine', 'pug');
+
 var port = 8080;
 
-app.get('/', function (req, res) {
-    res.send('Hello ' + req.query.name + ' !')
+
+
+
+
+passport.use(new Strategy({
+        clientID: "1147997221899426",
+        clientSecret: "fd96c6a7258691eb0a4347e5069ddf1a",
+        callbackURL: 'http://localhost:8080/login/facebook/return'
+    },
+    function (accessToken, refreshToken, profile, cb) {
+
+        return cb(null, profile);
+    })
+);
+passport.serializeUser(function (user, cb) {
+    cb(null, user);
 });
+
+passport.deserializeUser(function (obj, cb) {
+    cb(null, obj);
+});
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.get('/', function (req, res) {
+    res.render('home', {
+        user: req.user,
+    });
+});
+
+app.get('/login', function (req, res) {
+        res.render('login');
+});
+app.get('/login/facebook',
+    passport.authenticate('facebook'));
+
+app.get('/login/facebook/return',
+    passport.authenticate('facebook', {failureRedirect: '/login'}),
+    function (req, res) {
+        res.redirect('/');
+
+    });
+/*
+
+app.get('/profile',
+    require('connect-ensure-login').ensureLoggedIn(),
+    function (req, res) {
+        res.render('profile', {user: req.user});
+    }
+);
 
 app.post('/', function (req, res) {
     res.send('Hello From NodeJS ' + req.query.name + ' !')
@@ -29,7 +86,7 @@ app.post('/webhook', function (req, res) {
         console.log(event.sender);
         if (event.message && event.message.text) {
             if (event.message.text === 'Hi') {
-               getUserDetails(event.sender.id);
+                getUserDetails(event.sender.id);
             } else {
                 sendMessage(event.sender.id, {text: "Echo: " + event.message.text});
             }
@@ -105,6 +162,6 @@ function sendMessage(recipientId, message) {
         }
     });
 }
-
+*/
 app.listen(process.env.PORT || port);
 console.log('Running on http://localhost:' + port);
