@@ -27,7 +27,7 @@ var port = 8080;
 passport.use(new Strategy({
         clientID: "1147997221899426",
         clientSecret: "fd96c6a7258691eb0a4347e5069ddf1a",
-        callbackURL: 'http://localhost:8080/login/facebook/return'
+        callbackURL: 'https://lit-falls-27030.herokuapp.com/login/facebook/return'
     },
     function (accessToken, refreshToken, profile, cb) {
 
