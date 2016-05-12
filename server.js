@@ -140,11 +140,11 @@ function getUserDetails(userId) {
 }
 
 function sendTextMessage(recipientId, messageText) {
-    console.log(messageText);
     sendMessage(recipientId, messageText.text)
 }
 
 function sendMessage(recipientId, messageText) {
+    console.log(messageText);
     request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
         qs: {access_token: process.env.PAGE_ACCESS_TOKEN},
