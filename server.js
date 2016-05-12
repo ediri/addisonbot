@@ -53,7 +53,7 @@ app.post('/webhook', function (req, res) {
                 sendNotification(event.message.text.split("Send ")[1]);
             } else {
                 receipt.attachment.payload.elements[0].title="Engin Diri"
-                receipt.attachment.payload.elements[0].subtitle="Engin  Subtitle"
+                receipt.attachment.payload.elements[0].subtitle="<b>Engin  Subtitle</b>"
 
                 sendMessage(event.sender.id, receipt);
             }
