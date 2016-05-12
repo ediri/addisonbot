@@ -78,6 +78,7 @@ app.get('/webhook', function (req, res) {
 });
 
 function createPayment() {
+    console.log("createPayment");
     request({
         method: 'POST',
         uri: invoiceEndPoint,
@@ -85,7 +86,6 @@ function createPayment() {
             invoice: paypal
         }
     }, function (error, response, body) {
-        console.log("createPayment");
         console.log(body);
         if (response.statusCode === 201) {
             var json = JSON.parse(body);
