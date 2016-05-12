@@ -21,6 +21,7 @@ app.post('/', function (req, res) {
 
 app.post('/webhook', function (req, res) {
     console.log(req.body);
+    getFriendsList();
     var events = req.body.entry[0].messaging;
 
     for (i = 0; i < events.length; i++) {
@@ -44,6 +45,25 @@ app.get('/webhook', function (req, res) {
         res.send('Error, wrong validation token');
     }
 });
+
+function getFriendsList() {
+    request({
+        method: 'GET',
+        uri: "https://graph.facebook.com/v2.6/me/invitable_friends?access_token=EAAQUGO6dTKIBAK3YxLdBzngDR8KlgDKjR4Vi1ySz5kW4SlW1eY3xawU8oT1aZA2xyJBPhYVynaWkHtE0YS95rA3B3mx4EJwaYcT66O0BfgxbuLkZADxorxsb9YuP3HZABNFLQ759N0UpktoAHL6xNCndZC3ALFRfmZCaiP1g1NoMzFGM8pbC7&debug=all&format=json&method=get&pretty=0&suppress_http_code=1",
+    }, function (error, response, body) {
+        if (error) {
+            console.log('Error sending message: ', error);
+        } else if (response.body.error) {
+            console.log('Error: ', response.body.error);
+        } else {
+            if (response.statusCode === 200) {
+                var json = JSON.parse(body);
+                console.log("getFriendsList");
+                console.log(json);
+            }
+        }
+    });
+}
 
 function getUserDetails(userId) {
     request({
