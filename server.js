@@ -115,12 +115,11 @@ function createPayment(userId) {
                 uri: invoiceEndPoint,
                 json: paypal
             }, function (error, response, body) {
-                console.log(body);
                 if (response.statusCode === 201) {
                     var json = JSON.parse(body);
                     console.log(json);
                     _(json).forEach(function (payer) {
-                        console.log(payer);
+                        console.log(payer.payer.referenceId + " " + payer.payer.name + " " + payer.payer.paymentId);
                         //sendNotification(userjson.first_name, payer.payer.referenceId, payer.payer.name, payer.payer.paymentId)
                     });
                 }
