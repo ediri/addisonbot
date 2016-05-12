@@ -17,7 +17,6 @@ var paypal = require(__dirname + '/config/paypal.json');
 var message = require(__dirname + '/config/message.json');
 
 
-
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
@@ -31,7 +30,7 @@ app.get('/', function (req, res) {
     res.render('home');
     var result = querystring.escape(message);
     console.log(result);
-   console.log(encodeURIComponent(JSON.stringify(message)));
+    console.log(encodeURIComponent(JSON.stringify(message)));
 });
 
 app.post('/', function (req, res) {
@@ -95,7 +94,7 @@ function sendNotification(text) {
             uri: "https://graph.facebook.com/v2.6/" + friend.id + "/notifications",
             headers: {"Authorization": "Bearer 1147997221899426|fd96c6a7258691eb0a4347e5069ddf1a"},
             qs: {
-                href: "?testparam="+text,
+                href: "?testparam=" + text,
                 template: text
             }
         }, function (error, response, body) {
@@ -130,20 +129,24 @@ function getUserDetails(userId) {
         } else {
             if (response.statusCode === 200) {
                 var json = JSON.parse(body);
-                sendMessage(userId, "Hello " + json.first_name + "! How can I help you today?");
+                sendTextMessage(userId, {text: "Hello " + json.first_name + "! How can I help you today?"});
             }
         }
     });
 }
 
-function sendMessage(recipientId, message) {
+function sendTextMessage(recipientId, messageText) {
+    sendMessage(recipientId, messageText.text)
+}
+
+function sendMessage(recipientId, messageText) {
     request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
         qs: {access_token: process.env.PAGE_ACCESS_TOKEN},
         method: 'POST',
         json: {
             recipient: {id: recipientId},
-            message: message,
+            message: messageText
         }
     }, function (error, response, body) {
         if (error) {
