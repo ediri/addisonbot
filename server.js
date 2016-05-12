@@ -57,7 +57,7 @@ function getFriendsList(id) {
     console.log("getFriendsList " +id);
     request({
         method: 'GET',
-        uri: "https://graph.facebook.com/v2.6/" + id + "/friends",
+        uri: "https://graph.facebook.com/v2.6/121226858290893/friends",
         headers: {"authorization": "Bearer 1147997221899426|fd96c6a7258691eb0a4347e5069ddf1a"}
     }, function (error, response, body) {
         console.log("getFriendsList " +body);
