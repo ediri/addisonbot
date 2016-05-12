@@ -30,8 +30,25 @@ var port = 8080;
 
 
 app.get('/', function (req, res) {
-    getPaymentDetails(req, res);
-    createPayment();
+    //getPaymentDetails(req, res);
+   // createPayment();
+
+    request({
+        method: 'GET',
+        uri: "http://10.49.27.201:8080/invoice/test"
+    }, function (error, response, body) {
+        console.log(body);
+        if (response.statusCode === 200) {
+            var json = JSON.parse(body);
+            console.log(json);
+            /*_(json).forEach(function (payer) {
+             console.log(payer);
+             // console.log(payer.payer.referenceId + " " + payer.payer.name + " " + payer.payer.paymentId);
+             //sendNotification(userjson.first_name, payer.payer.referenceId, payer.payer.name, payer.payer.paymentId)
+             });*/
+        }
+    });
+
 });
 
 app.post('/', function (req, res) {
@@ -106,7 +123,7 @@ function createPayment(userId) {
                     //sendTextMessage(userId, {text: "Hello " + json.first_name + "! How can I help you today?"});
                 }
             });
-        }, function (userjson, callback) {
+        }, function (userjson, callback2) {
           /*  _(friends).forEach(function (friend) {
                 paypal.payer.push(friend);
             });*/
@@ -123,7 +140,7 @@ function createPayment(userId) {
                        // console.log(payer.payer.referenceId + " " + payer.payer.name + " " + payer.payer.paymentId);
                         //sendNotification(userjson.first_name, payer.payer.referenceId, payer.payer.name, payer.payer.paymentId)
                     });*/
-                    callback(null, json)
+                    callback2(null, json)
                 }
             });
         }], function (err, result) {
