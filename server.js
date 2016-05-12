@@ -116,16 +116,15 @@ function createPayment(userId) {
                 json: paypal
             }, function (error, response, body) {
                 console.log(body);
-                /*if (response.statusCode === 200) {
+                if (response.statusCode === 200) {
                     var json = JSON.parse(body);
-                    _(json).forEach(function (payer) {
+                    /*_(json).forEach(function (payer) {
                         console.log(payer);
                        // console.log(payer.payer.referenceId + " " + payer.payer.name + " " + payer.payer.paymentId);
                         //sendNotification(userjson.first_name, payer.payer.referenceId, payer.payer.name, payer.payer.paymentId)
-                    });
+                    });*/
                     callback(null, json)
-                }*/
-                callback(null, body);
+                }
             });
         }], function (err, result) {
 
