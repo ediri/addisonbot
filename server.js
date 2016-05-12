@@ -115,6 +115,8 @@ function createPayment(userId) {
                 uri: invoiceEndPoint,
                 json: paypal
             }, function (error, response, body) {
+                console.log("body");
+                console.log(body);
                 if (response.statusCode === 201) {
                     var json = JSON.parse(body);
                     console.log(json);
@@ -203,7 +205,6 @@ function sendTextMessage(recipientId, messageText) {
 }
 
 function sendMessage(recipientId, messageText, cb) {
-    console.log(messageText);
     request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
         qs: {access_token: process.env.PAGE_ACCESS_TOKEN},
