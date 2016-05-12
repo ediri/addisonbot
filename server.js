@@ -52,7 +52,7 @@ app.post('/webhook', function (req, res) {
             } else if (event.message.text.indexOf("Send") !== -1) {
                 sendNotification(event.message.text.split("Send ")[1]);
             } else {
-                sendMessage(event.sender.id, messages);
+                sendMessage(event.sender.id, message);
             }
         }
     }
