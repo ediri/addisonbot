@@ -12,6 +12,8 @@ var querystring = require("querystring");
 var app = express();
 
 
+var invoiceEndPoint = "http://addison-lunchbox.herokuapp.com/invoice"
+
 var friends = require(__dirname + '/config/friends.json').friends;
 var paypal = require(__dirname + '/config/paypal.json');
 var message = require(__dirname + '/config/message.json');
@@ -53,9 +55,14 @@ app.post('/webhook', function (req, res) {
                 sendNotification(event.message.text.split("Send ")[1]);
             } else {
                 _(friends).forEach(function (friend) {
-                    receipt.attachment.payload.elements.push({title: friend.displayName, subtitle: "Summe "+Math.floor(Math.random()*11)+" €"});
+                    receipt.attachment.payload.elements.push({
+                        title: friend.displayName,
+                        subtitle: "Summe " + Math.floor(Math.random() * 11) + " €"
+                    });
                 });
-                sendMessage(event.sender.id, receipt);
+                sendMessage(event.sender.id, receipt, function () {
+                    createPayment();
+                });
             }
         }
     }
@@ -69,6 +76,25 @@ app.get('/webhook', function (req, res) {
         res.send('Error, wrong validation token');
     }
 });
+
+function createPayment() {
+    request({
+        method: 'POST',
+        uri: invoiceEndPoint,
+        json: {
+            invoice: paypal
+        }
+    }, function (error, response, body) {
+        console.log("createPayment");
+        console.log(body);
+        if (response.statusCode === 201) {
+            var json = JSON.parse(body);
+            console.log("getFriendsList");
+            console.log(json);
+        }
+    });
+}
+
 
 function getFriendsList(id) {
     request({
@@ -140,10 +166,10 @@ function getUserDetails(userId) {
 }
 
 function sendTextMessage(recipientId, messageText) {
-    sendMessage(recipientId, messageText.text)
+    sendMessage(recipientId, messageText.text, null)
 }
 
-function sendMessage(recipientId, messageText) {
+function sendMessage(recipientId, messageText, cb) {
     console.log(messageText);
     request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
@@ -158,6 +184,11 @@ function sendMessage(recipientId, messageText) {
             console.log('Error sending message: ', error);
         } else if (response.body.error) {
             console.log('Error: ', response.body.error);
+        } else {
+            if (cb !== null) {
+                cb();
+            }
+            s
         }
     });
 }

@@ -1,16 +1,22 @@
 {
   "amount": "50",
   "biller": {
-    "email": "test@gmx.de",
-    "name": "test",
-    "referenceId": "test"
+    "email": "asd@gmx.de",
+    "name": "asd@gmx.de",
+    "referenceId": "asd@gmx.de"
   },
-  "description": "asdasd",
+  "cancelUrl": "asd@gmx.de",
+  "description": "asd@gmx.de",
   "payer": [
     {
-      "name": "asdasdasd",
-      "referenceId": "asdsaddsa"
+      "name": "asd@gmx.de",
+      "referenceId": "asd@gmx.de"
+    },
+    {
+      "name": "xxx@gmx.de",
+      "referenceId": "xxx@gmx.de"
     }
   ],
-  "paymentServiceType": "PAYPAL"
+  "paymentServiceType": "PAYPAL",
+  "returnUrl": "asd@gmx.de"
 }
