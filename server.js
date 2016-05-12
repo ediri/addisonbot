@@ -107,10 +107,12 @@ function createPayment(userId) {
                 }
             });
         }, function (userjson, callback) {
+            console.log("userjson " +userjson.first_name);
             _(friends).forEach(function (friend) {
                 paypal.payer.push(friend);
             });
-
+            console.log(" paypal.payer ");
+            console.log(paypal.payer)
             request({
                 method: 'POST',
                 uri: invoiceEndPoint,
