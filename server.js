@@ -77,7 +77,7 @@ app.get('/webhook', function (req, res) {
 function setPaymentDone(req, res) {
     request({
         method: 'POST',
-        uri: invoiceEndPoint + "/invoice/payment/paypal"
+        uri: invoiceEndPoint + "/payment/paypal",
         json: {
             payerId: req.query.payerId,
             paymentId: req.query.paymentId
