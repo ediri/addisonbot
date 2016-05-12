@@ -112,7 +112,7 @@ function createPayment(userId) {
                 paypal.payer.push(friend);
             });
             console.log(" paypal.payer ");
-            console.log(paypal.payer)
+            console.log(paypal)
             request({
                 method: 'POST',
                 uri: invoiceEndPoint,
