@@ -116,7 +116,7 @@ function createPayment(userId) {
                 json: paypal
             }, function (error, response, body) {
                 console.log("body");
-                console.log(body);
+                console.log(response.statusCode);
                 if (response.statusCode === 201) {
                     var json = JSON.parse(body);
                     console.log(json);
