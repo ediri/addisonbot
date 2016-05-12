@@ -6,10 +6,15 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var request = require('request');
 var _ = require('lodash');
+var Wit = require('node-wit').Wit;
+
 var app = express();
 
 
 var friends = require(__dirname + '/config/friends.json').friends;
+var paypal = require(__dirname + '/config/paypal.json');
+var message = require(__dirname + '/config/message.json');
+
 
 
 app.use(bodyParser.urlencoded({extended: true}));
@@ -24,7 +29,7 @@ var port = 8080;
 app.get('/', function (req, res) {
     res.render('home');
     if ("Send Engin ist der Beste".indexOf("Send") !== -1) {
-        console.log("Send Engin ist der Beste".split("Send ")[1]);
+        sendText2Wit("Send Engin ist der Beste".split("Send ")[1]);
     }
 });
 
@@ -46,7 +51,7 @@ app.post('/webhook', function (req, res) {
             } else if (event.message.text.indexOf("Send") !== -1) {
                 sendNotification(event.message.text.split("Send ")[1]);
             } else {
-                sendMessage(event.sender.id, {text: "Echo: " + event.message.text});
+                sendMessage(event.sender.id, {text: message});
             }
         }
     }
@@ -60,6 +65,30 @@ app.get('/webhook', function (req, res) {
         res.send('Error, wrong validation token');
     }
 });
+
+function sendText2Wit(text) {
+
+
+    request({
+        method: 'GET',
+        uri: "https://api.wit.ai/message?v=20160330&session_id=123abc&q=Hi",
+        headers: {"Authorization": "Bearer B2VSXB5KNBO47O5P5ZVOZFVPUXEYKKOB"}
+    }, function (error, response, body) {
+        console.log("getFriendsList " + body);
+        if (error) {
+            console.log('Error sending message: ', error);
+        } else if (response.body.error) {
+            console.log('Error: ', response.body.error);
+        } else {
+            if (response.statusCode === 200) {
+                var json = JSON.parse(body);
+                console.log(json);
+
+
+            }
+        }
+    });
+}
 
 function getFriendsList(id) {
     request({

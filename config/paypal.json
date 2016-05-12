@@ -1,0 +1,16 @@
+{
+  "amount": "50",
+  "biller": {
+    "email": "test@gmx.de",
+    "name": "test",
+    "referenceId": "test"
+  },
+  "description": "asdasd",
+  "payer": [
+    {
+      "name": "asdasdasd",
+      "referenceId": "asdsaddsa"
+    }
+  ],
+  "paymentServiceType": "PAYPAL"
+}
