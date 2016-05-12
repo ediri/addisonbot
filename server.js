@@ -12,6 +12,7 @@ var app = express();
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
 
 // der Order views wird geladen. Hier liegen alle JADE Templates drin
 app.set('views', path.join(__dirname, 'views'));

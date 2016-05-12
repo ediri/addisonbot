@@ -9,7 +9,8 @@
     "passport": "~0.3.2 ",
     "passport-facebook": "~2.1.0",
     "connect-ensure-login": "^0.1.1",
-    "pug": "~2.0.0-alpha7"
+    "pug": "~2.0.0-alpha7",
+    "express-session": "^1.13.0"
   },
   "scripts": {
     "start": "node server.js"
