@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 var request = require('request');
 var _ = require('lodash');
 var Wit = require('node-wit').Wit;
-var querystring = require("querystring");
+var async = require('async');
 
 var app = express();
 
@@ -31,6 +31,7 @@ var port = 8080;
 
 app.get('/', function (req, res) {
     getPaymentDetails(req, res);
+    createPayment();
 });
 
 app.post('/', function (req, res) {
@@ -44,12 +45,9 @@ app.post('/webhook', function (req, res) {
     var events = req.body.entry[0].messaging;
     for (i = 0; i < events.length; i++) {
         var event = events[i];
-        console.log(event.sender);
         if (event.message && event.message.text) {
             if (event.message.text === 'Hi') {
                 getUserDetails(event.sender.id);
-            } else if (event.message.text.indexOf("Send") !== -1) {
-                sendNotification(event.message.text.split("Send ")[1]);
             } else {
                 _(friends).forEach(function (friend) {
                     receipt.attachment.payload.elements.push({
@@ -58,7 +56,7 @@ app.post('/webhook', function (req, res) {
                     });
                 });
                 sendMessage(event.sender.id, receipt, function () {
-                    createPayment();
+                    createPayment(event.sender.id);
                 });
             }
         }
@@ -78,29 +76,57 @@ app.get('/webhook', function (req, res) {
 function getPaymentDetails(req, res) {
     request({
         method: 'GET',
-        uri: invoiceEndPoint+"/invoice/"+req.query.paymentId
+        uri: invoiceEndPoint + "/invoice/" + req.query.paymentId
     }, function (error, response, body) {
         if (response.statusCode === 200) {
             var json = JSON.parse(body);
             console.log(json);
-            res.render('home',{
-                payment:json
+            res.render('home', {
+                payment: json
             });
         }
     });
 }
 
-function createPayment() {
-    request({
-        method: 'POST',
-        uri: invoiceEndPoint,
-        json: paypal
-    }, function (error, response, body) {
-        console.log(body);
-        if (response.statusCode === 201) {
-            var json = JSON.parse(body);
-            console.log(json);
-        }
+function createPayment(userId) {
+    console.log("createPayment");
+    async.waterfall([
+        function (callback) {
+            request({
+                method: 'GET',
+                uri: "https://graph.facebook.com/v2.6/" + userId,
+                qs: {
+                    fields: "first_name,last_name,profile_pic,locale,timezone,gender",
+                    access_token: process.env.PAGE_ACCESS_TOKEN
+                },
+            }, function (error, response, body) {
+                if (response.statusCode === 200) {
+                    var json = JSON.parse(body);
+                    callback(null, json)
+                    //sendTextMessage(userId, {text: "Hello " + json.first_name + "! How can I help you today?"});
+                }
+            });
+        }, function (userjson, callback) {
+            _(friends).forEach(function (friend) {
+                paypal.payer.push(friend);
+            });
+
+            request({
+                method: 'POST',
+                uri: invoiceEndPoint,
+                json: paypal
+            }, function (error, response, body) {
+                console.log(body);
+                if (response.statusCode === 201) {
+                    var json = JSON.parse(body);
+                    console.log(json);
+                    _(json).forEach(function (payer) {
+                        sendNotification(userjson.first_name, payer.payer.referenceId, payer.payer.name, payer.payer.paymentId)
+                    });
+                }
+            });
+        }], function (err, result) {
+
     });
 }
 
@@ -126,29 +152,27 @@ function getFriendsList(id) {
     });
 }
 
-function sendNotification(text) {
-    _(friends).forEach(function (friend) {
-        request({
-            method: 'POST',
-            uri: "https://graph.facebook.com/v2.6/" + friend.id + "/notifications",
-            headers: {"Authorization": "Bearer 1147997221899426|fd96c6a7258691eb0a4347e5069ddf1a"},
-            qs: {
-                href: "?paymentId=" + text,
-                template: text
+function sendNotification(biller, referenceId, name, paymentId) {
+    request({
+        method: 'POST',
+        uri: "https://graph.facebook.com/v2.6/" + referenceId + "/notifications",
+        headers: {"Authorization": "Bearer 1147997221899426|fd96c6a7258691eb0a4347e5069ddf1a"},
+        qs: {
+            href: "?paymentId=" + paymentId,
+            template: "Hi " + name + "! " + biller + " send you a lunchbox invoice"
+        }
+    }, function (error, response, body) {
+        if (error) {
+            console.log('Error sending message: ', error);
+        } else if (response.body.error) {
+            console.log('Error: ', response.body.error);
+        } else {
+            if (response.statusCode === 200) {
+                var json = JSON.parse(body);
+                console.log("getFriendsList");
+                console.log(json);
             }
-        }, function (error, response, body) {
-            if (error) {
-                console.log('Error sending message: ', error);
-            } else if (response.body.error) {
-                console.log('Error: ', response.body.error);
-            } else {
-                if (response.statusCode === 200) {
-                    var json = JSON.parse(body);
-                    console.log("getFriendsList");
-                    console.log(json);
-                }
-            }
-        });
+        }
     });
 }
 
@@ -168,7 +192,8 @@ function getUserDetails(userId) {
         } else {
             if (response.statusCode === 200) {
                 var json = JSON.parse(body);
-                sendTextMessage(userId, {text: "Hello " + json.first_name + "! How can I help you today?"});
+                return json;
+                //sendTextMessage(userId, {text: "Hello " + json.first_name + "! How can I help you today?"});
             }
         }
     });

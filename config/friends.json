@@ -1,23 +1,23 @@
 {
   "friends": [
     {
-      "displayName": "Julian Donauer",
+      "name": "Julian Donauer",
       "id": "115069288907541"
     },
     {
-      "displayName": "Matthias Blanquett",
+      "name": "Matthias Blanquett",
       "id": "122047394875485"
     },
     {
-      "displayName": "Edwin Draser",
+      "name": "Edwin Draser",
       "id": "103207330096772"
     },
     {
-      "displayName": "Engin Diri",
+      "name": "Engin Diri",
       "id": "101399283611604"
     },
     {
-      "displayName": "Artur Zeiler",
+      "name": "Artur Zeiler",
       "id": "115162728898208"
     }
   ]
