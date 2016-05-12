@@ -52,7 +52,7 @@ app.post('/webhook', function (req, res) {
             } else if (event.message.text.indexOf("Send") !== -1) {
                 sendNotification(event.message.text.split("Send ")[1]);
             } else {
-                sendMessage(event.sender.id, {text: encodeURIComponent(JSON.stringify(message))});
+                sendMessage(event.sender.id, messages);
             }
         }
     }
@@ -130,7 +130,7 @@ function getUserDetails(userId) {
         } else {
             if (response.statusCode === 200) {
                 var json = JSON.parse(body);
-                sendMessage(userId, {text: "Hello " + json.first_name + "! How can I help you today?"});
+                sendMessage(userId, "Hello " + json.first_name + "! How can I help you today?");
             }
         }
     });
