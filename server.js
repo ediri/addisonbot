@@ -188,7 +188,6 @@ function sendMessage(recipientId, messageText, cb) {
             if (cb !== null) {
                 cb();
             }
-            s
         }
     });
 }
