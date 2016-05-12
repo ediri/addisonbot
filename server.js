@@ -21,7 +21,7 @@ app.post('/', function (req, res) {
 
 app.post('/webhook', function (req, res) {
     var events = req.body.entry[0].messaging;
-    console.log(event.sender);
+    console.log(events.sender);
     for (i = 0; i < events.length; i++) {
         var event = events[i];
         if (event.message && event.message.text) {
