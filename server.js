@@ -107,12 +107,9 @@ function createPayment(userId) {
                 }
             });
         }, function (userjson, callback) {
-            console.log("userjson " +userjson.first_name);
             _(friends).forEach(function (friend) {
                 paypal.payer.push(friend);
             });
-            console.log(" paypal.payer ");
-            console.log(paypal)
             request({
                 method: 'POST',
                 uri: invoiceEndPoint,
@@ -123,7 +120,8 @@ function createPayment(userId) {
                     var json = JSON.parse(body);
                     console.log(json);
                     _(json).forEach(function (payer) {
-                        sendNotification(userjson.first_name, payer.payer.referenceId, payer.payer.name, payer.payer.paymentId)
+                        console.log(payer);
+                        //sendNotification(userjson.first_name, payer.payer.referenceId, payer.payer.name, payer.payer.paymentId)
                     });
                 }
             });
