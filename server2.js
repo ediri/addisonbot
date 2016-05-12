@@ -188,12 +188,12 @@ function createSPA(req, res, json) {
     // Bootstrap-grid-layout - start
     spa += '<div class="row"><div class="col-md-4">&nbsp;</div><div class="col-md-4">';
 
-    spa += '<div class="jumbotron turkis">';
-    spa += '  <h1>LunchBox</h1>';
-    spa += '  <p>Mobile payment on the fly</p>';
-    spa += '</div>';
-
     if (req.query.page === '1') {
+
+        spa += '<div class="jumbotron turkis">';
+        spa += '  <h1>LunchBox</h1>';
+        spa += '  <p>Mobile payment on the fly</p>';
+        spa += '</div>';
 
         // Fix the input values
         json.amount = getGermanNumberWithEUR(json.amount);
@@ -238,20 +238,26 @@ function createSPA(req, res, json) {
         spa += '</div></form>';
 
     } else if (req.query.page === '2') {
+
+        spa += '<div class="jumbotron turkis">';
+        spa += '  <h1>LunchBox</h1>';
+        spa += '  <p>Admin-area</p>';
+        spa += '</div>';
+
         // Fix the input values
         json.amount = getGermanNumberWithEUR(json.amount);
-        //if (json.state === 'OPEN') {
-        //    json.state = 'No payments yet';
-        //}
-        //if (json.state === 'PARTIALLY_COLLECTED') {
-        //    json.state = 'Some payments received';
-        //}
-        //if (json.state === 'COMPLETELY_COLLECTED') {
-        //    json.state = 'All payments received';
-        //}
-        //if (json.state === 'TRANSFERRED_TO_BILLER') {
-        //    json.state = '';
-        //}
+        if (json.state === 'OPEN') {
+            json.state = 'No payments yet';
+        }
+        if (json.state === 'PARTIALLY_COLLECTED') {
+            json.state = 'Some payments received';
+        }
+        if (json.state === 'COMPLETELY_COLLECTED') {
+            json.state = 'All payments received';
+        }
+        if (json.state === 'TRANSFERRED_TO_BILLER') {
+            json.state = 'All payments received';
+        }
         if (!json.state) {
             json.state = 'unknown';
         }
@@ -272,6 +278,13 @@ function createSPA(req, res, json) {
 
         spa += '<hr />';
 
+        spa += '<label for="participants-label" class="col-sm-2 control-label">Number of participants</label>';
+        spa += '<div class="input-group col-sm-10">';
+        spa += '  <input type="text" class="form-control" readonly id="participants-label" value="' + (Array.isArray(json.invoices) ? json.invoices.length : 0) + '">';
+        spa += '</div>';
+
+        spa += '<hr />';
+
         spa += '<label for="x-label" class="col-sm-2 control-label">Description</label>';
         spa += '<div class="input-group col-sm-10">';
         spa += '  <textarea class="form-control" rows="3" readonly id="x-label">' + json.description + '</textarea>';
@@ -280,18 +293,26 @@ function createSPA(req, res, json) {
 
         spa += '<hr />';
 
-        spa += '<label for="state-label" class="col-sm-2 control-label">State</label>';
-        spa += '<div class="input-group col-sm-10">';
-        spa += '  <input type="text" class="form-control" readonly id="state-label" value="' + json.state + '">';
-        spa += '</div>';
+        if (Array.isArray(json.invoices)) {
+            spa += '<table class="table table-striped">';
+            spa += '<thead><tr><th>Name</th><th>Status</th></tr></thead><tbody>';
+
+            json.invoices.forEach(function(el) {
+                spa += '<tr><td>';
+                spa += el.payer.name;
+                spa += '</td><td>';
+                spa += el.state;
+                spa += '</td></tr>';
+            });
+            spa += '</tbody></table>';
+        }
 
         spa += '<hr />';
 
-        if (Array.isArray(json.invoices)) {
-            json.invoices.forEach(function() {
-                spa += '';
-            });
-        }
+        spa += '<label for="state-label" class="col-sm-2 control-label">Overall&nbsp;state:</label>';
+        spa += '<div class="input-group col-sm-10">';
+        spa += '  <input type="text" class="form-control" readonly id="state-label" value="' + json.state + '">';
+        spa += '</div>';
 
         spa += '</div></form>';
     } else {
