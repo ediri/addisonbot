@@ -166,7 +166,7 @@ function sendMessage(recipientId, message) {
         method: 'POST',
         json: {
             recipient: {id: recipientId},
-            message: message,
+            message: encodeURIComponent(message),
         }
     }, function (error, response, body) {
         if (error) {
