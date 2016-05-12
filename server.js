@@ -123,7 +123,7 @@ function createPayment(userId) {
                     //sendTextMessage(userId, {text: "Hello " + json.first_name + "! How can I help you today?"});
                 }
             });
-        }, function (userjson, callback2) {
+        }, function (userjson, callback) {
           /*  _(friends).forEach(function (friend) {
                 paypal.payer.push(friend);
             });*/
@@ -140,7 +140,7 @@ function createPayment(userId) {
                        // console.log(payer.payer.referenceId + " " + payer.payer.name + " " + payer.payer.paymentId);
                         //sendNotification(userjson.first_name, payer.payer.referenceId, payer.payer.name, payer.payer.paymentId)
                     });*/
-                    callback2(null, json)
+                    callback(null, json)
                 }
             });
         }], function (err, result) {
