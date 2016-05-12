@@ -51,7 +51,7 @@ app.post('/webhook', function (req, res) {
             } else {
                 _(friends).forEach(function (friend) {
                     receipt.attachment.payload.elements.push({
-                        title: friend.displayName,
+                        title: friend.name,
                         subtitle: "Summe " + Math.floor(Math.random() * 11) + " €"
                     });
                 });
