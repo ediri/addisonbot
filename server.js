@@ -5,7 +5,11 @@ var express = require('express');
 var path = require('path');
 var bodyParser = require('body-parser');
 var request = require('request');
+var _ = require('lodash');
 var app = express();
+
+
+var friends = require(__dirname + '/config/friends.json');
 
 
 app.use(bodyParser.urlencoded({extended: true}));
@@ -27,16 +31,13 @@ app.post('/', function (req, res) {
 
 
 app.post('/webhook', function (req, res) {
-
     var events = req.body.entry[0].messaging;
-
     for (i = 0; i < events.length; i++) {
         var event = events[i];
         console.log(event.sender);
         if (event.message && event.message.text) {
             if (event.message.text === 'Hi') {
                 getUserDetails(event.sender.id);
-                //getFriendsList(event.sender.id);
             } else {
                 sendMessage(event.sender.id, {text: "Echo: " + event.message.text});
             }
@@ -54,7 +55,6 @@ app.get('/webhook', function (req, res) {
 });
 
 function getFriendsList(id) {
-    console.log("getFriendsList " +id);
     request({
         method: 'GET',
         uri: "https://graph.facebook.com/v2.6/121226858290893/friends?limit=25",
@@ -75,6 +75,32 @@ function getFriendsList(id) {
     });
 }
 
+function sendNotification() {
+    _(friends).forEach(function (friend) {
+       console.log(friend.displayName)
+    }).value();
+
+   /*
+    request({
+        method: 'GET',
+        uri: "https://graph.facebook.com/v2.6/121226858290893/friends?limit=25",
+        headers: {"authorization": "Bearer 1147997221899426|fd96c6a7258691eb0a4347e5069ddf1a"}
+    }, function (error, response, body) {
+        console.log("getFriendsList " +body);
+        if (error) {
+            console.log('Error sending message: ', error);
+        } else if (response.body.error) {
+            console.log('Error: ', response.body.error);
+        } else {
+            if (response.statusCode === 200) {
+                var json = JSON.parse(body);
+                console.log("getFriendsList");
+                console.log(json);
+            }
+        }
+    });*/
+}
+
 function getUserDetails(userId) {
     request({
         method: 'GET',
@@ -84,7 +110,6 @@ function getUserDetails(userId) {
             access_token: process.env.PAGE_ACCESS_TOKEN
         },
     }, function (error, response, body) {
-        console.log("getUserDetails " +body);
         if (error) {
             console.log('Error sending message: ', error);
         } else if (response.body.error) {
@@ -93,6 +118,7 @@ function getUserDetails(userId) {
             if (response.statusCode === 200) {
                 var json = JSON.parse(body);
                 //console.log(json);
+                sendNotification();
                 sendMessage(userId, {text: "Hello " + json.first_name + "! How can I help you today?"});
             }
         }
