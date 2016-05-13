@@ -51,7 +51,6 @@ app.post('/webhook', function (req, res) {
         if (event.message && event.message.text) {
 
             bot.runConversation(event.message.text,function (msg) {
-                console.log(msg);
                 sendTextMessage(event.sender.id, {text: msg})
             });
 
@@ -268,7 +267,7 @@ function sendMessage(recipientId, messageText, cb) {
         method: 'POST',
         json: {
             recipient: {id: recipientId},
-            message: messageText
+            message: "TEST"
         }
     }, function (error, response, body) {
         if (error) {
