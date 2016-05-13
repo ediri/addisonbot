@@ -1,4 +1,5 @@
 var Wit = require('node-wit').Wit;
+var uuid = require('node-uuid');
 var exports = module.exports = {};
 
 const firstEntityValue = (entities, entity) =>{
@@ -111,7 +112,7 @@ function initBot(mycb) {
         }
     };
     client = new Wit("B2VSXB5KNBO47O5P5ZVOZFVPUXEYKKOB", actions);
-    session = 'my-user-session-42';
+    session = uuid.v1();
     context0 = {};
 }
 
@@ -119,6 +120,7 @@ exports.runConversation = function (text,cb) {
     if (client === null) {
         console.log("initBot")
         initBot(cb);
+        console.log(session)
     }
 
     client.runActions(session, text, context0, function (e, context0) {

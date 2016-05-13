@@ -13,7 +13,8 @@
     "express-session": "^1.13.0",
     "lodash": "~4.12.0",
     "node-wit":"~3.3.0",
-    "async": "~2.0.0-rc.4"
+    "async": "~2.0.0-rc.4",
+    "node-uuid":"1.4.7"
   },
   "scripts": {
     "start": "node server.js"
