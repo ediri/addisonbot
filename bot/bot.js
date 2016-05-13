@@ -3,7 +3,9 @@ var uuid = require('node-uuid');
 var redis = require("redis");
 var exports = module.exports = {};
 
-const firstEntityValue = (entities, entity) =>{
+const firstEntityValue = (entities, entity) =
+>
+{
     //console.log(entity + "-->");
     //console.log(entities[entity]);
     const val = entities && entities[entity] &&
@@ -17,7 +19,9 @@ const firstEntityValue = (entities, entity) =>{
     return typeof val === 'object' ? val.value : val;
 }
 
-const allEntityValue = (entities, entity) =>{
+const allEntityValue = (entities, entity) =
+>
+{
     //console.log(entity + "-->");
     //console.log(entities[entity]);1
     if (entities && entities[entity] &&
@@ -75,10 +79,10 @@ function parseEnabled(entities, context) {
         context.enabled = enabled;
     }
 }
-var client=null;
+var client = null;
 var context0;
 var session;
-var redisClient=null;
+var redisClient = null;
 
 function initBot(mycb) {
     const actions = {
@@ -114,16 +118,16 @@ function initBot(mycb) {
         }
     };
     client = new Wit("B2VSXB5KNBO47O5P5ZVOZFVPUXEYKKOB", actions);
-    redisClient = redis.createClient("redis://@ec2-54-217-222-237.eu-west-1.compute.amazonaws.com",10349);
+    redisClient = redis.createClient(10349, "redis://@ec2-54-217-222-237.eu-west-1.compute.amazonaws.com");
     redis.auth("p1qess4qhifrue5o5q9v7pnvvkd");
-    redisClient.on('connect', function() {
+    redisClient.on('connect', function () {
         console.log('connected');
     });
     session = uuid.v1();
     context0 = {};
 }
 
-exports.runConversation = function (text,cb) {
+exports.runConversation = function (text, cb) {
     if (client === null) {
         console.log("initBot")
         initBot(cb);
@@ -137,48 +141,48 @@ exports.runConversation = function (text,cb) {
         }
         console.log('The session state is now: ' + JSON.stringify(context0));
     });
-/*
-    client.runActions(session, 'bill', context0, function (e, context0) {
-        if (e) {
-            console.log('Oops! Got an error: ' + e);
-            return;
-        }
-        console.log('The session state is now: ' + JSON.stringify(context0));
-        client.runActions(session, 'Engin', context0, function (e, context0) {
-            if (e) {
-                console.log('Oops! Got an error: ' + e);
-                return;
-            }
-            console.log('The session state is now: ' + JSON.stringify(context0));
-            client.runActions(session, '50€', context0, function (e, context0) {
-                if (e) {
-                    console.log('Oops! Got an error: ' + e);
-                    return;
-                }
-                console.log('The session state is now: ' + JSON.stringify(context0));
-                client.runActions(session, 'Paypal', context0, function (e, context0) {
-                    if (e) {
-                        console.log('Oops! Got an error: ' + e);
-                        return;
-                    }
-                    console.log('The session state is now: ' + JSON.stringify(context0));
-                    client.runActions(session, 'ed@ed.de', context0, function (e, context0) {
-                        if (e) {
-                            console.log('Oops! Got an error: ' + e);
-                            return;
-                        }
-                        console.log('The session state is now: ' + JSON.stringify(context0));
-                        client.runActions(session, 'Yes', context0, function (e, context0) {
-                            if (e) {
-                                console.log('Oops! Got an error: ' + e);
-                                return;
-                            }
-                            console.log('The session state is now: ' + JSON.stringify(context0));
-                        });
-                    });
-                });
-            });
-        });
+    /*
+     client.runActions(session, 'bill', context0, function (e, context0) {
+     if (e) {
+     console.log('Oops! Got an error: ' + e);
+     return;
+     }
+     console.log('The session state is now: ' + JSON.stringify(context0));
+     client.runActions(session, 'Engin', context0, function (e, context0) {
+     if (e) {
+     console.log('Oops! Got an error: ' + e);
+     return;
+     }
+     console.log('The session state is now: ' + JSON.stringify(context0));
+     client.runActions(session, '50€', context0, function (e, context0) {
+     if (e) {
+     console.log('Oops! Got an error: ' + e);
+     return;
+     }
+     console.log('The session state is now: ' + JSON.stringify(context0));
+     client.runActions(session, 'Paypal', context0, function (e, context0) {
+     if (e) {
+     console.log('Oops! Got an error: ' + e);
+     return;
+     }
+     console.log('The session state is now: ' + JSON.stringify(context0));
+     client.runActions(session, 'ed@ed.de', context0, function (e, context0) {
+     if (e) {
+     console.log('Oops! Got an error: ' + e);
+     return;
+     }
+     console.log('The session state is now: ' + JSON.stringify(context0));
+     client.runActions(session, 'Yes', context0, function (e, context0) {
+     if (e) {
+     console.log('Oops! Got an error: ' + e);
+     return;
+     }
+     console.log('The session state is now: ' + JSON.stringify(context0));
+     });
+     });
+     });
+     });
+     });
 
-    });*/
+     });*/
 };
