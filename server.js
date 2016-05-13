@@ -18,7 +18,7 @@ var invoiceEndPoint = "http://addison-lunchbox.herokuapp.com/invoice";
 var adminEndPoint = invoiceEndPoint + '/bill';
 
 var friends = require(__dirname + '/config/friends.json').friends;
-var paypal = require(__dirname + '/config/paypal.json');
+
 var message = require(__dirname + '/config/message.json');
 var receipt = require(__dirname + '/config/receipt.json');
 
@@ -171,6 +171,7 @@ function createPayment(userId, invoice) {
                 }
             });
         }, function (userjson, callback) {
+            var paypal = require(__dirname + '/config/paypal.json');
             _(friends).forEach(function (friend) {
                 paypal.payer.push(friend);
             });
