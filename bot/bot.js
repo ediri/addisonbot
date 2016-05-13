@@ -26,7 +26,7 @@ const allEntityValue = (entities, entity) =>{
         entities[entity].length > 0) {
         var returnvals = [];
         for (i=0; i<entities[entity].length; i++) {
-            returnval.push(entities[entity][i].value);
+            returnvals.push(entities[entity][i].value);
         }
         return returnvals;
     }
