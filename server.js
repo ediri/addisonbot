@@ -1,5 +1,5 @@
 /**
- * Created by Engin.Diri on 10.05.2016.
+ * Created by Team Cloud Number 9 on 10.05.2016.
  */
 var express = require('express');
 var path = require('path');
@@ -14,7 +14,8 @@ var bot = require("./bot/bot.js");
 var app = express();
 
 
-var invoiceEndPoint = "http://addison-lunchbox.herokuapp.com/invoice"
+var invoiceEndPoint = "http://addison-lunchbox.herokuapp.com/invoice";
+var adminEndPoint = invoiceEndPoint + '/bill';
 
 var friends = require(__dirname + '/config/friends.json').friends;
 var paypal = require(__dirname + '/config/paypal.json');
@@ -32,12 +33,17 @@ var port = 8080;
 
 
 app.get('/', function (req, res) {
-    res.send("engin");
-    //getPaymentBill(req, res);
+    if (req.query.page === 'admin') {
+        getAdminPage(req,res);
+    } else {
+        getPaymentDetails(req, res);
+    }
 });
 
 app.post('/', function (req, res) {
-    if (req.query.payment === 'ok') {
+    if (req.query.page === 'admin') {
+        getAdminPage(req, res);
+    } else if (req.query.payment === 'ok') {
         setPaymentDone(req, res);
     } else {
         getPaymentDetails(req, res);
@@ -46,7 +52,7 @@ app.post('/', function (req, res) {
 
 app.post('/webhook', function (req, res) {
     var events = req.body.entry[0].messaging;
-    for (i = 0; i < events.length; i++) {
+    for (var i = 0; i < events.length; i++) {
         var event = events[i];
         if (event.message && event.message.text) {
 
@@ -116,12 +122,28 @@ function setPaymentDone(req, res) {
 function getPaymentDetails(req, res) {
     request({
         method: 'GET',
-        uri: invoiceEndPoint + "/invoice/" + req.query.paymentId
+        uri: invoiceEndPoint + '/' + req.query.paymentId // "PAY-9KL178166W187071MK42ZJRI" // = test-ID vs. req.query.paymentId
     }, function (error, response, body) {
         if (response.statusCode === 200) {
             var json = JSON.parse(body);
             console.log(json);
             res.render('home', {
+                payment: json
+            });
+        }
+    });
+}
+
+function getAdminPage(req, res) {
+    request({
+        method: 'GET',
+        uri: adminEndPoint + '/' + req.query.paymentId // + "00001111" // = test-ID vs. req.query.paymentId
+    }, function (error, response, body) {
+        if (response.statusCode === 200) {
+
+            var json = JSON.parse(body);
+            console.log(json);
+            res.render('home2', {
                 payment: json
             });
         }
@@ -142,7 +164,7 @@ function createPayment(userId) {
             }, function (error, response, body) {
                 if (response.statusCode === 200) {
                     var json = JSON.parse(body);
-                    callback(null, json)
+                    callback(null, json);
                     //sendTextMessage(userId, {text: "Hello " + json.first_name + "! How can I help you today?"});
                 }
             });
