@@ -56,9 +56,19 @@ app.post('/webhook', function (req, res) {
         var event = events[i];
         if (event.message && event.message.text) {
 
-            bot.runConversation(event.sender.id,event.message.text, function (msg) {
-                sendTextMessage(event.sender.id, {text: msg})
-            });
+            if (event.message.text === 'Hi') {
+                bot.deleteRedisCache(event.sender.id,function() {
+                    bot.runConversation(event.sender.id,event.message.text, function (msg) {
+                        sendTextMessage(event.sender.id, {text: msg})
+                    });
+                })
+            }else {
+                bot.runConversation(event.sender.id,event.message.text, function (msg) {
+                    sendTextMessage(event.sender.id, {text: msg})
+                });
+            }
+
+
 
             /*if (event.message.text === 'Hi') {
              getUserDetails(event.sender.id);

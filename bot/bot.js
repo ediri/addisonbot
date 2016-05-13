@@ -126,6 +126,13 @@ function initBot(mycb) {
     //context0 = {};
 }
 
+exports.deleteRedisCache = function (id,cb) {
+    redisClient.del(id, function(err, reply) {
+        console.log("deletes");
+        cb();
+    });
+};
+
 exports.runConversation = function (id,text, cb) {
    // var context0={};
     if (client === null) {
