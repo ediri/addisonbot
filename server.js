@@ -30,8 +30,7 @@ var port = 8080;
 
 
 app.get('/', function (req, res) {
-    //getPaymentDetails(req, res);
-    // createPayment();
+    getPaymentDetails(req, res);
 });
 
 app.post('/', function (req, res) {

@@ -15,12 +15,18 @@ hmtl
       text-align: center;
       color: #ffffff;
     }
-    #middle {
-      background-color: #3b5998;
-      height: 100%;
+    .middle {
+      background-color: rgba(0, 128, 197, 1);
+      margin-top: 60px;
+      height: 60%;
+      width: 520px;
+    }
+    .header {
+      margin: 30px 30px 10px 30px;
     }
     h1 {
-      margin: 30px;
+      font-size:70px;
+      color: #E6742E;
     }
     h4 {
       margin: 30px;
@@ -28,24 +34,54 @@ hmtl
     h6 {
       font-style: italic;
     }
-    #value {
-      font-size: 60px;
+    .title {
+      margin-top: -20px;
+    }
+    .titleBrand {
+      text-align: left;
+      padding-left: 17px;
+    }
+    .value {
+      font-size: 90px;
+      margin-bottom: 50px;
+      color: white;
+    }
+    .buttonPP {
+        border: 1px solid white;
+        padding: 25px;
+        border-radius: 5px;
+
+    }
+    .brand {
+        position: absolute;
+        left: 0;
+    }
+    .buttonBar a{
+        padding: 5px;
     }
  body
   .row
-    .col-md-4 &nbsp;
-    .col-md-4#middle
-     div
-      h1 LunchBox
-      p Mobile payment on the fly
+    .col-lg-4 &nbsp;
+    .col-lg-4.middle
+     .header
+      h6.titleBrand Addison
+      h1.title LunchBox
+      p.lead Mobile payment on the fly
      div
        h4 #{payment.name}
      div
        h6 #{payment.description}
      div
-       h1#value #{payment.amount} €
-     div
-       a(href=payment.paypalLink): i.fa.fa-paypal.fa-3x
-    .col-md-4 &nbsp;
+       h1.value #{payment.amount} €
+     div.buttonBar
+       a(href=payment.paypalLink): i.fa.fa-paypal.fa-3x.buttonPP
+       a(href='#'): i.fa.fa-amazon.fa-3x.buttonPP
+    .col-lg-4 &nbsp;
+  .row
+   .col-lg-4 &nbsp;
+   .col-lg-4
+     img.brand(src="http://www.addison.de/fileadmin/templates/images/css/logo-wk.png")
+   .col-lg-4 &nbsp;
+
 
 
