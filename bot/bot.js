@@ -76,7 +76,7 @@ function parseEnabled(entities, context) {
     }
 }
 var client = null;
-var context0;
+//var context0;
 var session;
 var redisClient = null;
 
@@ -122,19 +122,21 @@ function initBot(mycb) {
         console.log('connected');
     });
     session = uuid.v1();
-    context0 = {};
+    //context0 = {};
 }
 
 exports.runConversation = function (id,text, cb) {
+    var context0={};
     if (client === null) {
         initBot(cb);
     }
     redisClient.get(id, function(err, reply) {
         console.log("reply");
-        console.log(reply);
         context0 = reply;
+        console.log(reply);
     });
-
+    console.log("context0");
+    console.log(context0);
     client.runActions(id, text, context0, function (e, context0) {
         if (e) {
             console.log('Oops! Got an error: ' + e);
