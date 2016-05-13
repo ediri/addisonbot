@@ -114,7 +114,7 @@ function initBot(mycb) {
         }
     };
     client = new Wit("B2VSXB5KNBO47O5P5ZVOZFVPUXEYKKOB", actions);
-    redisClient = redis.createClient(10349, "ec2-54-217-222-237.eu-west-1.compute.amazonaws.com");
+    redisClient = redis.createClient(10349, "ec2-54-217-222-237.eu-west-1.compute.amazonaws.com",{no_ready_check: true});
     redisClient.auth("p1qess4qhifrue5o5q9v7pnvvkd", function() {
         console.log('Redis client connected');
     });
