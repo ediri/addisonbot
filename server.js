@@ -33,11 +33,11 @@ var port = 8080;
 
 
 app.get('/', function (req, res) {
-    if (req.query.page === 'admin') {
+    /*if (req.query.page === 'admin') {
         getAdminPage(req,res);
     } else {
         getPaymentDetails(req, res);
-    }
+    }*/
 });
 
 app.post('/', function (req, res) {
