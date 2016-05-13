@@ -33,7 +33,7 @@ var port = 8080;
 
 
 app.get('/', function (req, res) {
-    /*if (req.query.page === 'admin') {
+    /*if (req.query.paymentId) {
         getAdminPage(req,res);
     } else {
         getPaymentDetails(req, res);
@@ -42,7 +42,7 @@ app.get('/', function (req, res) {
 });
 
 app.post('/', function (req, res) {
-    if (req.query.page === 'admin') {
+    if (req.query.paymentId) {
         getAdminPage(req, res);
     } else if (req.query.payment === 'ok') {
         setPaymentDone(req, res);
@@ -122,7 +122,7 @@ function setPaymentDone(req, res) {
 function getPaymentDetails(req, res) {
     request({
         method: 'GET',
-        uri: invoiceEndPoint + '/' + req.query.paymentId // "PAY-9KL178166W187071MK42ZJRI" // = test-ID vs. req.query.paymentId
+        uri: invoiceEndPoint + '/' + req.query.userId // "PAY-9KL178166W187071MK42ZJRI" // = test-ID vs. req.query.userId
     }, function (error, response, body) {
         if (response.statusCode === 200) {
             var json = JSON.parse(body);
