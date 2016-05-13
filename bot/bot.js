@@ -134,16 +134,14 @@ exports.runConversation = function (id,text, cb) {
     async.waterfall([
         function (callback) {
             redisClient.get(id, function(err, reply) {
-                console.log("reply");
                 if (reply === null) {
-                    reply = {}
+                    reply = {};
+                } else {
+                    reply=JSON.parse(reply);
                 }
-                console.log(reply);
-                callback(null,JSON.parse(reply))
+                callback(null,reply)
             });
         }, function (context0, callback) {
-            console.log("context0");
-            console.log(context0);
             client.runActions(id, text, context0, function (e, context0) {
                 if (e) {
                     console.log('Oops! Got an error: ' + e);
@@ -154,8 +152,7 @@ exports.runConversation = function (id,text, cb) {
             });
         }, function (context0, callback) {
             redisClient.set(id, JSON.stringify(context0), function(err, reply) {
-                console.log(reply);
-                callback(null,context0) 
+                callback(null,context0)
             });
         }], function (err, result) {
     });
