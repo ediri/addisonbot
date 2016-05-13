@@ -1,5 +1,6 @@
 var Wit = require('node-wit').Wit;
 var uuid = require('node-uuid');
+var redis = require("redis");
 var exports = module.exports = {};
 
 const firstEntityValue = (entities, entity) =>{
@@ -77,6 +78,7 @@ function parseEnabled(entities, context) {
 var client=null;
 var context0;
 var session;
+var redisClient=null;
 
 function initBot(mycb) {
     const actions = {
@@ -112,6 +114,10 @@ function initBot(mycb) {
         }
     };
     client = new Wit("B2VSXB5KNBO47O5P5ZVOZFVPUXEYKKOB", actions);
+    redisClient = redis.createClient("redis://h:p1qess4qhifrue5o5q9v7pnvvkd@ec2-54-217-222-237.eu-west-1.compute.amazonaws.com",10349);
+    redisClient.on('connect', function() {
+        console.log('connected');
+    });
     session = uuid.v1();
     context0 = {};
 }
