@@ -132,7 +132,7 @@ exports.runConversation = function (id,text, cb) {
         console.log(session)
     }
     redisClient.get(id, function(err, reply) {
-        context0 = reply;
+        context0 = JSON.parse(reply);
     });
 
     client.runActions(session, text, context0, function (e, context0) {
@@ -140,7 +140,7 @@ exports.runConversation = function (id,text, cb) {
             console.log('Oops! Got an error: ' + e);
             return;
         }
-        redisClient.set(id, context0);
+        redisClient.set(id, JSON.stringify(context0));
         console.log('The session state is now: ' + JSON.stringify(context0));
     });
     /*
