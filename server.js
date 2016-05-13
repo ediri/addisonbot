@@ -42,7 +42,7 @@ app.get('/', function (req, res) {
 });
 
 app.post('/', function (req, res) {
-    if (req.query.paymentId) {
+    if (req.query.userId) {
         getAdminPage(req, res);
     } else if (req.query.payment === 'ok') {
         setPaymentDone(req, res);
@@ -122,7 +122,7 @@ function setPaymentDone(req, res) {
 function getPaymentDetails(req, res) {
     request({
         method: 'GET',
-        uri: invoiceEndPoint + '/' + req.query.userId // "PAY-9KL178166W187071MK42ZJRI" // = test-ID vs. req.query.userId
+        uri: invoiceEndPoint + '/' + req.query.paymentId // "PAY-9KL178166W187071MK42ZJRI" // = test-ID vs. req.query.userId
     }, function (error, response, body) {
         if (response.statusCode === 200) {
             var json = JSON.parse(body);
@@ -137,10 +137,9 @@ function getPaymentDetails(req, res) {
 function getAdminPage(req, res) {
     request({
         method: 'GET',
-        uri: adminEndPoint + '/' + req.query.paymentId // + "00001111" // = test-ID vs. req.query.paymentId
+        uri: adminEndPoint + '/' + req.query.userId // + "00001111" // = test-ID vs. req.query.paymentId
     }, function (error, response, body) {
         if (response.statusCode === 200) {
-
             var json = JSON.parse(body);
             console.log(json);
             res.render('home2', {
