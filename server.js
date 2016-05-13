@@ -125,28 +125,28 @@ function createPayment(userId) {
                 }
             });
         }, function (userjson, callback) {
-                _(friends).forEach(function (friend) {
-                    paypal.payer.push(friend);
-                });
-                request({
-                    method: 'POST',
-                    uri: invoiceEndPoint,
-                    json: paypal
-                }, function (error, response, body) {
-                    if (response.statusCode === 200) {
-                        //var json = JSON.parse(body);
-                        _(body).forEach(function (payer) {
-                            //console.log(payer);
-                            //console.log(payer.payer.referenceId + " " + payer.payer.name + " " + payer.paymentId);
-                            sendNotification(userjson.first_name, payer.payer.referenceId, payer.payer.name, payer.paymentId)
-                        });
-                        callback(null, body)
-                    }
-                });
-            }, function (userjson, callback) {
+            _(friends).forEach(function (friend) {
+                paypal.payer.push(friend);
+            });
             request({
                 method: 'POST',
                 uri: invoiceEndPoint,
+                json: paypal
+            }, function (error, response, body) {
+                if (response.statusCode === 200) {
+                    //var json = JSON.parse(body);
+                    _(body).forEach(function (payer) {
+                        //console.log(payer);
+                        //console.log(payer.payer.referenceId + " " + payer.payer.name + " " + payer.paymentId);
+                        sendNotification(userjson.first_name, payer.payer.referenceId, payer.payer.name, payer.paymentId)
+                    });
+                    callback(null, body)
+                }
+            });
+        }, function (userjson, callback) {
+            request({
+                method: 'POST',
+                uri: "10.49.27.201:8080/",
                 json: paypal
             }, function (error, response, body) {
                 if (response.statusCode === 200) {
@@ -159,7 +159,7 @@ function createPayment(userId) {
                     callback(null, body)
                 }
             });
-            ], function (err, result) {
+        }], function (err, result) {
 
     });
 }
