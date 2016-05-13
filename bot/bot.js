@@ -132,6 +132,8 @@ exports.deleteRedisCache = function (id, cb) {
             console.log("deletes");
             cb();
         });
+    } else {
+        cb();
     }
 };
 
