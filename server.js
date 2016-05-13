@@ -172,11 +172,11 @@ function createPayment(userId, invoice) {
             _(friends).forEach(function (friend) {
                 paypal.payer.push(friend);
             });
-            
-            paypayl.amount=invoice.amount;
-            paypayl.biller.email=invoice.account
-            paypayl.biller.name=userjson.first_name
-            paypayl.biller.referenceId=userId
+
+            paypal.amount=invoice.amount;
+            paypal.biller.email=invoice.account
+            paypal.biller.name=userjson.first_name
+            paypal.biller.referenceId=userId
 
             console.log(paypal);
             request({
