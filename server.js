@@ -261,6 +261,7 @@ function sendTextMessage(recipientId, messageText) {
 }
 
 function sendMessage(recipientId, messageText, cb) {
+    console.log(messageText);
     request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
         qs: {access_token: process.env.PAGE_ACCESS_TOKEN},
