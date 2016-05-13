@@ -139,7 +139,7 @@ exports.runConversation = function (id,text, cb) {
                     reply = {}
                 }
                 console.log(reply);
-                callback(null,reply)
+                callback(null,JSON.parse(reply))
             });
         }, function (context0, callback) {
             console.log("context0");
