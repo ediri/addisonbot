@@ -127,7 +127,7 @@ function initBot(mycb) {
 }
 
 exports.runConversation = function (id,text, cb) {
-    var context0={};
+   // var context0={};
     if (client === null) {
         initBot(cb);
     }
@@ -135,7 +135,9 @@ exports.runConversation = function (id,text, cb) {
         function (callback) {
             redisClient.get(id, function(err, reply) {
                 console.log("reply");
-                context0 = reply;
+                if (reply === null) {
+                    reply = {}
+                }
                 console.log(reply);
                 callback(null,reply)
             });
@@ -151,8 +153,10 @@ exports.runConversation = function (id,text, cb) {
                 callback(null,context0)
             });
         }, function (context0, callback) {
-            redisClient.set(id, JSON.stringify(context0));
-            callback(null,context0)
+            redisClient.set(id, JSON.stringify(context0), function(err, reply) {
+                console.log(reply);
+                callback(null,context0)
+            });
         }], function (err, result) {
     });
 
