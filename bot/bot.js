@@ -117,6 +117,7 @@ function initBot(mycb) {
 
 exports.runConversation = function (text,cb) {
     if (client === null) {
+        console.log("initBot")
         initBot(cb);
     }
 
