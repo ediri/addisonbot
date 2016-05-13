@@ -256,7 +256,7 @@ function getUserDetails(userId) {
 }
 
 function sendTextMessage(recipientId, messageText) {
-    sendMessage(recipientId, messageText.text, null)
+    sendMessage(recipientId, messageText, null)
 }
 
 function sendMessage(recipientId, messageText, cb) {
@@ -266,9 +266,7 @@ function sendMessage(recipientId, messageText, cb) {
         method: 'POST',
         json: {
             recipient: {id: recipientId},
-            message: {
-                text: messageText
-            }
+            message: messageText
         }
     }, function (error, response, body) {
         if (error) {
