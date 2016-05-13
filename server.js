@@ -6,8 +6,10 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var request = require('request');
 var _ = require('lodash');
-var Wit = require('node-wit').Wit;
+
 var async = require('async');
+
+var bot = require("./bot/bot.js");
 
 var app = express();
 
@@ -30,7 +32,13 @@ var port = 8080;
 
 
 app.get('/', function (req, res) {
-    getPaymentDetails(req, res);
+    bot.initBot(function (msg) {
+        console.log(msg);
+    });
+    bot.runConversation();
+
+    res.send("engin");
+    //getPaymentBill(req, res);
 });
 
 app.post('/', function (req, res) {
@@ -41,13 +49,16 @@ app.post('/', function (req, res) {
     }
 });
 
-
 app.post('/webhook', function (req, res) {
     var events = req.body.entry[0].messaging;
     for (i = 0; i < events.length; i++) {
         var event = events[i];
         if (event.message && event.message.text) {
-            if (event.message.text === 'Hi') {
+
+            bot.runConversation(event.message.text,function (msg) {
+                console.log(msg);
+            });
+            /*if (event.message.text === 'Hi') {
                 getUserDetails(event.sender.id);
             } else {
                 _(friends).forEach(function (friend) {
@@ -59,7 +70,7 @@ app.post('/webhook', function (req, res) {
                 sendMessage(event.sender.id, receipt, function () {
                     createPayment(event.sender.id);
                 });
-            }
+            }*/
         }
     }
     res.sendStatus(200);
@@ -72,6 +83,21 @@ app.get('/webhook', function (req, res) {
         res.send('Error, wrong validation token');
     }
 });
+
+function getPaymentBill(req, res) {
+    request({
+        method: 'GET',
+        uri: "10.49.27.201:8080/invoice/bill",
+        qs: {
+            paymentId: req.query.paymentId
+        }
+    }, function (error, response, body) {
+        if (response.statusCode === 200) {
+            var json = JSON.parse(body);
+            console.log(json);
+        }
+    });
+}
 
 function setPaymentDone(req, res) {
     request({
