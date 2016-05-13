@@ -56,9 +56,11 @@ app.post('/webhook', function (req, res) {
     for (var i = 0; i < events.length; i++) {
         var event = events[i];
         if (event.message && event.message.text) {
+            console.log(event.sender.id);
             if (event.message.text === 'Hi') {
                 bot.deleteRedisCache(event.sender.id, function () {
                     bot.runConversation(event.sender.id, event.message.text, function (msg) {
+                        console.log(event.sender.id);
                         sendTextMessage(event.sender.id, {text: msg})
                     }, function (invoice) {
                         console.log("sendBills cb");
@@ -67,6 +69,7 @@ app.post('/webhook', function (req, res) {
                 })
             } else {
                 bot.runConversation(event.sender.id, event.message.text, function (msg) {
+                    console.log(event.sender.id);
                     sendTextMessage(event.sender.id, {text: msg})
                 }, function (invoice) {
                     console.log("sendBills cb");
