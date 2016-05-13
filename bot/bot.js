@@ -132,7 +132,7 @@ exports.runConversation = function (id,text, cb) {
         console.log(session)
     }
     redisClient.get(id, function(err, reply) {
-        context0 = JSON.parse(reply);
+        context0 = reply;
     });
 
     client.runActions(session, text, context0, function (e, context0) {
