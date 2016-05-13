@@ -3,9 +3,7 @@ var uuid = require('node-uuid');
 var redis = require("redis");
 var exports = module.exports = {};
 
-const firstEntityValue = (entities, entity) =
->
-{
+const firstEntityValue = (entities, entity) =>{
     //console.log(entity + "-->");
     //console.log(entities[entity]);
     const val = entities && entities[entity] &&
@@ -19,9 +17,7 @@ const firstEntityValue = (entities, entity) =
     return typeof val === 'object' ? val.value : val;
 }
 
-const allEntityValue = (entities, entity) =
->
-{
+const allEntityValue = (entities, entity) =>{
     //console.log(entity + "-->");
     //console.log(entities[entity]);1
     if (entities && entities[entity] &&
