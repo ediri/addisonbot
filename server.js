@@ -173,6 +173,7 @@ function createPayment(userId, invoice) {
         }, function (userjson, callback) {
             var paypal = require(__dirname + '/config/paypal.json');
             var friends = require(__dirname + '/config/friends.json').friends;
+            paypal.payer = [];
             _(friends).forEach(function (friend) {
                 paypal.payer.push(friend);
             });
