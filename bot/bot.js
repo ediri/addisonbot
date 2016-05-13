@@ -43,7 +43,12 @@ function parseIntend(entities, context) {
 function parseContacts(entities, context) {
     var contacts = allEntityValue(entities, 'contact');
     if (contacts) {
-        context.contacts = contacts;
+       var contactsstring;
+        for (i=0; i<contacts.length; i++) {
+            contactsstring+=contacts[i] + " ";
+        }
+        context.contacts = contactsstring;
+        context.contactsarray = contacts;
     }
 }
 
