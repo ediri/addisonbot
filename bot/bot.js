@@ -155,7 +155,7 @@ exports.runConversation = function (id,text, cb) {
         }, function (context0, callback) {
             redisClient.set(id, JSON.stringify(context0), function(err, reply) {
                 console.log(reply);
-                callback(null,context0)
+                callback(null,context0) 
             });
         }], function (err, result) {
     });
