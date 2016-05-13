@@ -61,6 +61,7 @@ app.post('/webhook', function (req, res) {
                     bot.runConversation(event.sender.id, event.message.text, function (msg) {
                         sendTextMessage(event.sender.id, {text: msg})
                     }, function (invoice) {
+                        console.log("sendBills cb");
                         createPayment(event.sender.id, invoice);
                     });
                 })
@@ -68,25 +69,10 @@ app.post('/webhook', function (req, res) {
                 bot.runConversation(event.sender.id, event.message.text, function (msg) {
                     sendTextMessage(event.sender.id, {text: msg})
                 }, function (invoice) {
+                    console.log("sendBills cb");
                     createPayment(event.sender.id, invoice);
                 });
             }
-
-
-
-            /*if (event.message.text === 'Hi') {
-             getUserDetails(event.sender.id);
-             } else {
-             _(friends).forEach(function (friend) {
-             receipt.attachment.payload.elements.push({
-             title: friend.name,
-             subtitle: "Summe " + Math.floor(Math.random() * 11) + " €"
-             });
-             });
-             sendMessage(event.sender.id, receipt, function () {
-             createPayment(event.sender.id);
-             });
-             }*/
         }
     }
     res.sendStatus(200);

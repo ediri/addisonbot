@@ -120,8 +120,9 @@ function initBot(mycb,sendBillCB) {
             //console.log(error.message);
         },
         sendBills(sessionId, context, cb) {
-            sendBillCB(context);
             cb(context);
+            console.log("action sendBills");
+            sendBillCB(context);
         }
     };
     client = new Wit("B2VSXB5KNBO47O5P5ZVOZFVPUXEYKKOB", actions);
