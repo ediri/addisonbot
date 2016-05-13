@@ -127,15 +127,15 @@ function initBot(mycb) {
 
 exports.runConversation = function (id,text, cb) {
     if (client === null) {
-        console.log("initBot")
         initBot(cb);
-        console.log(session)
     }
     redisClient.get(id, function(err, reply) {
+        console.log("reply");
+        console.log(reply);
         context0 = reply;
     });
 
-    client.runActions(session, text, context0, function (e, context0) {
+    client.runActions(id, text, context0, function (e, context0) {
         if (e) {
             console.log('Oops! Got an error: ' + e);
             return;
