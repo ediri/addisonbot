@@ -125,18 +125,22 @@ function initBot(mycb) {
     context0 = {};
 }
 
-exports.runConversation = function (text, cb) {
+exports.runConversation = function (id,text, cb) {
     if (client === null) {
         console.log("initBot")
         initBot(cb);
         console.log(session)
     }
+    redisClient.get(id, function(err, reply) {
+        context0 = reply;
+    });
 
     client.runActions(session, text, context0, function (e, context0) {
         if (e) {
             console.log('Oops! Got an error: ' + e);
             return;
         }
+        redisClient.set(id, context0);
         console.log('The session state is now: ' + JSON.stringify(context0));
     });
     /*

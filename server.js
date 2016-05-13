@@ -50,7 +50,7 @@ app.post('/webhook', function (req, res) {
         var event = events[i];
         if (event.message && event.message.text) {
 
-            bot.runConversation(event.message.text, function (msg) {
+            bot.runConversation(event.sender.id,event.message.text, function (msg) {
                 sendTextMessage(event.sender.id, {text: msg})
             });
 
