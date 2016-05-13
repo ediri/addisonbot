@@ -50,23 +50,23 @@ app.post('/webhook', function (req, res) {
         var event = events[i];
         if (event.message && event.message.text) {
 
-            bot.runConversation(event.message.text,function (msg) {
+            bot.runConversation(event.message.text, function (msg) {
                 sendTextMessage(event.sender.id, {text: msg})
             });
 
             /*if (event.message.text === 'Hi') {
-                getUserDetails(event.sender.id);
-            } else {
-                _(friends).forEach(function (friend) {
-                    receipt.attachment.payload.elements.push({
-                        title: friend.name,
-                        subtitle: "Summe " + Math.floor(Math.random() * 11) + " €"
-                    });
-                });
-                sendMessage(event.sender.id, receipt, function () {
-                    createPayment(event.sender.id);
-                });
-            }*/
+             getUserDetails(event.sender.id);
+             } else {
+             _(friends).forEach(function (friend) {
+             receipt.attachment.payload.elements.push({
+             title: friend.name,
+             subtitle: "Summe " + Math.floor(Math.random() * 11) + " €"
+             });
+             });
+             sendMessage(event.sender.id, receipt, function () {
+             createPayment(event.sender.id);
+             });
+             }*/
         }
     }
     res.sendStatus(200);
@@ -260,7 +260,7 @@ function sendTextMessage(recipientId, messageText) {
 }
 
 function sendMessage(recipientId, messageText, cb) {
-    console.log(messageText);
+    console.log(recipientId + ' ' + messageText);
     request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
         qs: {access_token: process.env.PAGE_ACCESS_TOKEN},
