@@ -1,6 +1,7 @@
 var Wit = require('node-wit').Wit;
 var uuid = require('node-uuid');
 var redis = require("redis");
+var async = require('async');
 var exports = module.exports = {};
 
 const firstEntityValue = (entities, entity) =>{
@@ -130,21 +131,36 @@ exports.runConversation = function (id,text, cb) {
     if (client === null) {
         initBot(cb);
     }
-    redisClient.get(id, function(err, reply) {
-        console.log("reply");
-        context0 = reply;
-        console.log(reply);
+    async.waterfall([
+        function (callback) {
+            redisClient.get(id, function(err, reply) {
+                console.log("reply");
+                context0 = reply;
+                console.log(reply);
+                callback(null,reply)
+            });
+        }, function (context0, callback) {
+            console.log("context0");
+            console.log(context0);
+            client.runActions(id, text, context0, function (e, context0) {
+                if (e) {
+                    console.log('Oops! Got an error: ' + e);
+                    return;
+                }
+                console.log('The session state is now: ' + JSON.stringify(context0));
+                callback(null,context0)
+            });
+        }, function (context0, callback) {
+            redisClient.set(id, JSON.stringify(context0));
+            callback(null,context0)
+        }], function (err, result) {
     });
-    console.log("context0");
-    console.log(context0);
-    client.runActions(id, text, context0, function (e, context0) {
-        if (e) {
-            console.log('Oops! Got an error: ' + e);
-            return;
-        }
-        redisClient.set(id, JSON.stringify(context0));
-        console.log('The session state is now: ' + JSON.stringify(context0));
-    });
+
+
+
+
+
+
     /*
      client.runActions(session, 'bill', context0, function (e, context0) {
      if (e) {
