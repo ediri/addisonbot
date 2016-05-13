@@ -32,11 +32,6 @@ var port = 8080;
 
 
 app.get('/', function (req, res) {
-    bot.initBot(function (msg) {
-        console.log(msg);
-    });
-    bot.runConversation();
-
     res.send("engin");
     //getPaymentBill(req, res);
 });
@@ -57,7 +52,9 @@ app.post('/webhook', function (req, res) {
 
             bot.runConversation(event.message.text,function (msg) {
                 console.log(msg);
+                sendTextMessage(event.sender.id, {text: msg})
             });
+
             /*if (event.message.text === 'Hi') {
                 getUserDetails(event.sender.id);
             } else {
