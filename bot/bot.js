@@ -43,7 +43,7 @@ function parseIntend(entities, context) {
 function parseContacts(entities, context) {
     var contacts = allEntityValue(entities, 'contact');
     if (contacts) {
-       var contactsstring;
+       var contactsstring="";
         for (i=0; i<contacts.length; i++) {
             contactsstring+=contacts[i] + " ";
         }
@@ -90,7 +90,7 @@ var client = null;
 var session;
 var redisClient = null;
 
-function initBot(mycb) {
+function initBot(mycb,sendBillCB) {
     const actions = {
         say(sessionId, context, message, cb) {
             cb();
@@ -120,6 +120,7 @@ function initBot(mycb) {
             //console.log(error.message);
         },
         sendBills(sessionId, context, cb) {
+            sendBillCB(context);
             cb(context);
         }
     };
@@ -146,10 +147,10 @@ exports.deleteRedisCache = function (id, cb) {
     }
 };
 
-exports.runConversation = function (id,text, cb) {
+exports.runConversation = function (id,text, cb, sendBillCB) {
    // var context0={};
     if (client === null) {
-        initBot(cb);
+        initBot(cb,sendBillCB);
     }
     async.waterfall([
         function (callback) {

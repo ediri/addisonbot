@@ -38,6 +38,7 @@ app.get('/', function (req, res) {
     } else {
         getPaymentDetails(req, res);
     }*/
+    res.sendStatus(200);
 });
 
 app.post('/', function (req, res) {
@@ -56,14 +57,18 @@ app.post('/webhook', function (req, res) {
         var event = events[i];
         if (event.message && event.message.text) {
             if (event.message.text === 'Hi') {
-                bot.deleteRedisCache(event.sender.id,function() {
-                    bot.runConversation(event.sender.id,event.message.text, function (msg) {
+                bot.deleteRedisCache(event.sender.id, function () {
+                    bot.runConversation(event.sender.id, event.message.text, function (msg) {
                         sendTextMessage(event.sender.id, {text: msg})
+                    }, function (invoice) {
+                        createPayment(event.sender.id, invoice);
                     });
                 })
             } else {
-                bot.runConversation(event.sender.id,event.message.text, function (msg) {
+                bot.runConversation(event.sender.id, event.message.text, function (msg) {
                     sendTextMessage(event.sender.id, {text: msg})
+                }, function (invoice) {
+                    createPayment(event.sender.id, invoice);
                 });
             }
 
@@ -159,7 +164,7 @@ function getAdminPage(req, res) {
     });
 }
 
-function createPayment(userId) {
+function createPayment(userId, invoice) {
     console.log("createPayment");
     async.waterfall([
         function (callback) {
@@ -181,6 +186,13 @@ function createPayment(userId) {
             _(friends).forEach(function (friend) {
                 paypal.payer.push(friend);
             });
+            
+            paypayl.amount=invoice.amount;
+            paypayl.biller.email=invoice.account
+            paypayl.biller.name=userjson.first_name
+            paypayl.biller.referenceId=userId
+
+            console.log(paypal);
             request({
                 method: 'POST',
                 uri: invoiceEndPoint,
@@ -189,29 +201,14 @@ function createPayment(userId) {
                 if (response.statusCode === 200) {
                     //var json = JSON.parse(body);
                     _(body).forEach(function (payer) {
-                        //console.log(payer);
-                        //console.log(payer.payer.referenceId + " " + payer.payer.name + " " + payer.paymentId);
-                        sendNotification(userjson.first_name, payer.payer.referenceId, payer.payer.name, payer.paymentId)
+                        sendNotificationToPayer(userjson.first_name, payer.payer.referenceId, payer.payer.name, payer.paymentId)
                     });
                     callback(null, body)
                 }
             });
         }, function (userjson, callback) {
-            request({
-                method: 'POST',
-                uri: "10.49.27.201:8080/",
-                json: paypal
-            }, function (error, response, body) {
-                if (response.statusCode === 200) {
-                    //var json = JSON.parse(body);
-                    _(body).forEach(function (payer) {
-                        //console.log(payer);
-                        //console.log(payer.payer.referenceId + " " + payer.payer.name + " " + payer.paymentId);
-                        sendTextMessage(userId, {text: "Hello"});
-                    });
-                    callback(null, body)
-                }
-            });
+            sendTextMessage(userId, {text: "https://apps.facebook.com/de_addison_lunchbox/?userId="+userId});
+            callback(null, userjson)
         }], function (err, result) {
 
     });
@@ -239,7 +236,7 @@ function getFriendsList(id) {
     });
 }
 
-function sendNotification(biller, referenceId, name, paymentId) {
+function sendNotificationToPayer(biller, referenceId, name, paymentId) {
     request({
         method: 'POST',
         uri: "https://graph.facebook.com/v2.6/" + referenceId + "/notifications",
