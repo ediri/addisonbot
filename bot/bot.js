@@ -122,7 +122,7 @@ function initBot(mycb,sendBillCB) {
         sendBills(sessionId, context, cb) {
             cb(context);
             console.log("action sendBills");
-            sendBillCB(context);
+            //sendBillCB(context);
         }
     };
     client = new Wit("B2VSXB5KNBO47O5P5ZVOZFVPUXEYKKOB", actions);
