@@ -125,9 +125,10 @@ function initBot(mycb, sendBillCB, id) {
             sendBillCB(context,id);
         }
     };
+
     client = new Wit("B2VSXB5KNBO47O5P5ZVOZFVPUXEYKKOB", actions);
-    redisClient = redis.createClient(6859, "ec2-54-247-161-36.eu-west-1.compute.amazonaws.com",{no_ready_check: true});
-    redisClient.auth("peambnhuh19u6t82r7pv7ldcl7l", function() {
+    redisClient = redis.createClient(6859, "ec2-54-247-161-36.eu-west-1.compute.amazonaws.com", {no_ready_check: true});
+    redisClient.auth("peambnhuh19u6t82r7pv7ldcl7l", function () {
         console.log('Redis client connected');
     });
     redisClient.on('connect', function () {
@@ -150,12 +151,16 @@ exports.deleteRedisCache = function (id, cb) {
 
 exports.runConversation = function (id,text, cb, sendBillCB) {
    // var context0={};
-    if (client === null) {
-        console.log("init bot");
-        initBot(cb,sendBillCB,id);
-    }
+    //if (client === null) {
+    // console.log("init bot");
+    //    initBot(cb,sendBillCB,id);
+    //}
     async.waterfall([
         function (callback) {
+            console.log("init bot");
+            initBot(cb,sendBillCB,id);
+            callback(null,null)
+        }, function (callback) {
             console.log("get context from redis with key - "+id);
             redisClient.get(id, function(err, reply) {
                 if (reply === null) {
