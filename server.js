@@ -18,7 +18,6 @@ var invoiceEndPoint = "http://addison-lunchbox.herokuapp.com/invoice";
 var adminEndPoint = invoiceEndPoint + '/bill';
 
 
-
 var message = require(__dirname + '/config/message.json');
 var receipt = require(__dirname + '/config/receipt.json');
 
@@ -34,10 +33,10 @@ var port = 8080;
 
 app.get('/', function (req, res) {
     /*if (req.query.paymentId) {
-        getAdminPage(req,res);
-    } else {
-        getPaymentDetails(req, res);
-    }*/
+     getAdminPage(req,res);
+     } else {
+     getPaymentDetails(req, res);
+     }*/
     res.sendStatus(200);
 });
 
@@ -58,22 +57,22 @@ app.post('/webhook', function (req, res) {
         if (event.message && event.message.text) {
             console.log(event.sender.id);
             if (event.message.text === 'Hi') {
-                bot.deleteRedisCache(event.sender.id, function () {
-                    bot.runConversation(event.sender.id, event.message.text, function (msg) {
-                        console.log(event.sender.id);
-                        sendTextMessage(event.sender.id, {text: msg})
-                    }, function (invoice) {
+                bot.deleteRedisCache(event.sender.id, function (id) {
+                    bot.runConversation(id, event.message.text, function (msg, id) {
+                        console.log(id);
+                        sendTextMessage(id, {text: msg})
+                    }, function (invoice, id) {
                         console.log("sendBills cb");
-                        createPayment(event.sender.id, invoice);
+                        createPayment(id, invoice);
                     });
                 })
             } else {
-                bot.runConversation(event.sender.id, event.message.text, function (msg) {
-                    console.log(event.sender.id);
-                    sendTextMessage(event.sender.id, {text: msg})
-                }, function (invoice) {
+                bot.runConversation(event.sender.id, event.message.text, function (msg, id) {
+                    console.log(id);
+                    sendTextMessage(id, {text: msg})
+                }, function (invoice, id) {
                     console.log("sendBills cb");
-                    createPayment(event.sender.id, invoice);
+                    createPayment(id, invoice);
                 });
             }
         }
@@ -178,10 +177,10 @@ function createPayment(userId, invoice) {
                 paypal.payer.push(friend);
             });
 
-            paypal.amount=invoice.amount;
-            paypal.biller.email=invoice.account
-            paypal.biller.name=userjson.first_name
-            paypal.biller.referenceId=userId
+            paypal.amount = invoice.amount;
+            paypal.biller.email = invoice.account
+            paypal.biller.name = userjson.first_name
+            paypal.biller.referenceId = userId
 
             console.log(paypal);
             request({
@@ -198,7 +197,7 @@ function createPayment(userId, invoice) {
                 }
             });
         }, function (userjson, callback) {
-            sendTextMessage(userId, {text: "https://apps.facebook.com/de_addison_lunchbox/?userId="+userId});
+            sendTextMessage(userId, {text: "https://apps.facebook.com/de_addison_lunchbox/?userId=" + userId});
             callback(null, userjson)
         }], function (err, result) {
 
