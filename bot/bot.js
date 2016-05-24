@@ -90,7 +90,7 @@ var client = null;
 var session;
 var redisClient = null;
 
-function initBot(mycb,sendBillCB,id) {
+function initBot(mycb, sendBillCB, id) {
     const actions = {
         say(sessionId, context, message, cb) {
             cb();
@@ -151,10 +151,12 @@ exports.deleteRedisCache = function (id, cb) {
 exports.runConversation = function (id,text, cb, sendBillCB) {
    // var context0={};
     if (client === null) {
+        console.log("init bot");
         initBot(cb,sendBillCB,id);
     }
     async.waterfall([
         function (callback) {
+            console.log("get context from redis with key - "+id);
             redisClient.get(id, function(err, reply) {
                 if (reply === null) {
                     reply = {};
@@ -164,6 +166,7 @@ exports.runConversation = function (id,text, cb, sendBillCB) {
                 callback(null,reply)
             });
         }, function (context0, callback) {
+            console.log("runActions with Bot with key - "+ id);
             client.runActions(id, text, context0, function (e, context0) {
                 if (e) {
                     console.log('Oops! Got an error: ' + e);
@@ -173,6 +176,7 @@ exports.runConversation = function (id,text, cb, sendBillCB) {
                 callback(null,context0)
             });
         }, function (context0, callback) {
+            console.log("set context to redis with key - "+ id);
             redisClient.set(id, JSON.stringify(context0), function(err, reply) {
                 callback(null,context0)
             });
