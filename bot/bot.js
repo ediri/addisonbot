@@ -150,11 +150,6 @@ exports.deleteRedisCache = function (id, cb) {
 };
 
 exports.runConversation = function (id,text, cb, sendBillCB) {
-   // var context0={};
-    //if (client === null) {
-    // console.log("init bot");
-    //    initBot(cb,sendBillCB,id);
-    //}
     async.waterfall([
         function (callback) {
             console.log("init bot");
