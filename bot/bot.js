@@ -159,7 +159,7 @@ exports.runConversation = function (id,text, cb, sendBillCB) {
         function (callback) {
             console.log("init bot");
             initBot(cb,sendBillCB,id);
-            callback(null,null)
+            callback(null)
         }, function (callback) {
             console.log("get context from redis with key - "+id);
             redisClient.get(id, function(err, reply) {
